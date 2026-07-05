@@ -1,0 +1,42 @@
+{
+  "$schema": "https://thevlsc.com/schemas/cloudflare-mcp.config.schema.json",
+  "name": "ChatVLSC Cloudflare MCP Configuration",
+  "status": "started",
+  "service": "VLSC User Role MCP",
+  "worker": {
+    "name": "vlsc-user-role-mcp",
+    "account_id": "3213c2f6b79055d92921a6b81d1bedeb",
+    "routes": [
+      "https://api.thevlsc.com/user_role/v1",
+      "https://mcp.thevlsc.com/user_role/auth",
+      "https://chatvlsc.thevlsc.com/auth/v1"
+    ]
+  },
+  "mcp": {
+    "transport": "https",
+    "api_uri": "https://api.thevlsc.com/user_role/v1",
+    "display_url": "https://mcp.thevlsc.com/user_role/auth",
+    "chatvlsc_auth_url": "https://chatvlsc.thevlsc.com/auth/v1",
+    "plannedEndpoints": {
+      "configuration": "GET /mcp/config",
+      "health": "GET /health",
+      "ocrStatus": "GET /ocr/status",
+      "ocrSchema": "GET /ocr/schema",
+      "fileSortStatus": "GET /files/sort/status"
+    }
+  },
+  "repository": {
+    "repository_full_name": "support-thevlsc/brain-slushie",
+    "repository_url": "https://github.com/support-thevlsc/brain-slushie",
+    "default_branch": "main",
+    "visibility": "public",
+    "publish_policy": "sanitized_config_only"
+  },
+  "legacyRepositoryPolicy": "Do not include or reintroduce legacy repository references.",
+  "secretsPolicy": {
+    "cloudflareApiToken": "Worker secret only",
+    "openaiApiKey": "Not configured; use secure OpenAI Developers key flow when available",
+    "notion": "No secrets in Notion",
+    "github": "Do not publish tenant secrets or API keys to public repositories"
+  }
+}
