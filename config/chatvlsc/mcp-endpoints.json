@@ -1,0 +1,46 @@
+{
+  "service": "VLSC User Role MCP",
+  "api_uri": "https://api.thevlsc.com/user_role/v1",
+  "display_url": "https://mcp.thevlsc.com/user_role/auth",
+  "chatvlsc_auth_url": "https://chatvlsc.thevlsc.com/auth/v1",
+  "ai_agent_username": "chatvlsc@thevlsc.com",
+  "tenant_id": "cdfffb2c-ef54-4854-9702-b9916ac552d1",
+  "primary_domain": "thevlsc.com",
+  "file_sort": {
+    "status": "https://api.thevlsc.com/user_role/v1/files/sort/status",
+    "plan": "https://api.thevlsc.com/user_role/v1/files/sort/plan",
+    "workflow": "https://api.thevlsc.com/user_role/v1/files/sort/workflow"
+  },
+  "mcp_config": {
+    "configuration": "https://api.thevlsc.com/user_role/v1/mcp/config"
+  },
+  "ocr": {
+    "status": "https://api.thevlsc.com/user_role/v1/ocr/status",
+    "schema": "https://api.thevlsc.com/user_role/v1/ocr/schema",
+    "database_name": "chatvlsc-ocr-stage-one",
+    "database_id": "06ce7692-f710-46a2-9a5f-d5428f941e5c"
+  },
+  "repository": {
+    "repository_full_name": "support-thevlsc/brain-slushie",
+    "repository_url": "https://github.com/support-thevlsc/brain-slushie",
+    "publish_policy": "sanitized_config_only"
+  },
+  "identity_policy": {
+    "policy": "https://api.thevlsc.com/user_role/v1/identity/policy",
+    "evaluate": "https://api.thevlsc.com/user_role/v1/identity/evaluate",
+    "external_identity_providers_allowed": true,
+    "rule": "External identity providers are allowed when the external identity GUID matches the authorized member GUID."
+  },
+  "consents": [
+    {
+      "name": "User Role MCP Authorization",
+      "description": "Authorize Warp agents to use the VLSC user-role MCP server. Authentication and user-facing consent are presented through the display URL while MCP traffic connects to the API URI.",
+      "scope": "User role and permission lookup for VLSC agent workflows"
+    },
+    {
+      "name": "Workspace Role Visibility",
+      "description": "Allow the service to present role names, permission categories, and consent state for review before an agent relies on them.",
+      "scope": "Read-only presentation of role and permission metadata"
+    }
+  ]
+}
