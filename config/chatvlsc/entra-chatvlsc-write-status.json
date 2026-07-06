@@ -1,0 +1,44 @@
+{
+  "$schema": "https://thevlsc.com/schemas/entra-chatvlsc-write-status.schema.json",
+  "name": "ChatVLSC Entra App Registration Write Status",
+  "checked_at": "2026-07-05T20:49:20-05:00",
+  "application": {
+    "object_id": "9c392dd7-7e0b-49a8-be0e-1269358f6f59",
+    "client_id": "520e42c6-398f-4521-aa62-b3b95092637d",
+    "display_name": "ChatVLSC"
+  },
+  "attempted_change": {
+    "risk_level": 8,
+    "method": "Microsoft Graph PATCH /applications/{id}",
+    "transport": "Zapier Microsoft Entra ID raw mutating request",
+    "intent": "Preserve existing app registration collections while adding ChatVLSC description, homepage, redirect URIs, app roles, extra delegated consent scopes, and tags."
+  },
+  "result": {
+    "applied": false,
+    "status": 403,
+    "error_code": "Authorization_RequestDenied",
+    "error_message": "Insufficient privileges to complete the operation.",
+    "request_id": "32f50f83-3db5-4d31-a60a-a462feea57f0"
+  },
+  "readback_after_attempt": {
+    "description": null,
+    "identifierUris": [
+      "https://mcp.thevlsc.com"
+    ],
+    "homePageUrl": "https://thevlsc.com/chatvlsc/",
+    "redirectUris": [],
+    "appRolesCount": 0,
+    "oauth2PermissionScopes": [
+      "user_role"
+    ],
+    "tags": [
+      "apiConsumer",
+      "webApp"
+    ]
+  },
+  "required_next_step": {
+    "permission": "Application.ReadWrite.All or equivalent Application Administrator / Cloud Application Administrator rights for the connected Microsoft Entra identity",
+    "safe_executor": "scripts/apply-entra-user-role-mcp.ps1",
+    "logo_note": "App logo upload still requires Microsoft Graph binary PUT /applications/{id}/logo using public/assets/chatvlsc-logo-512.png."
+  }
+}
