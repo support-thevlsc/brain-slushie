@@ -19,6 +19,8 @@
   "security": {
     "route_map": "https://api.thevlsc.com/user_role/v1/security/route-map",
     "development_route_map": "https://mcp.thevlsc.com/v1/security/route-map",
+    "response_headers": "https://api.thevlsc.com/user_role/v1/security/headers",
+    "development_response_headers": "https://mcp.thevlsc.com/v1/security/headers",
     "local_config": "config/chatvlsc/secure-api-route-map.json"
   },
   "ocr": {
@@ -34,6 +36,8 @@
   },
   "identity_policy": {
     "policy": "https://api.thevlsc.com/user_role/v1/identity/policy",
+    "providers": "https://api.thevlsc.com/user_role/v1/identity/providers",
+    "development_providers": "https://mcp.thevlsc.com/v1/identity/providers",
     "evaluate": "https://api.thevlsc.com/user_role/v1/identity/evaluate",
     "external_identity_providers_allowed": true,
     "rule": "External identity providers are allowed when the external identity GUID matches the authorized member GUID."

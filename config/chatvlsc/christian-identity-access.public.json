@@ -1,0 +1,85 @@
+{
+  "$schema": "https://thevlsc.com/schemas/christian-identity-access.schema.json",
+  "name": "Christian Identity Provider Platform Access Map",
+  "status": "mapped_pending_platform_admin_writes",
+  "risk_level": 8,
+  "updated_at": "2026-07-05T21:22:00-05:00",
+  "owner": {
+    "display_name": "Christian Joel Velasco Martinez",
+    "primary_user_principal_name": "christian@thevlsc.com",
+    "dns_domain_name": "thevlsc.com"
+  },
+  "public_identifier_policy": "Public Worker and GitHub config show only the primary DNS-domain identity. Alternate personal identity-provider account identifiers stay in private Notion/Entra review notes or local-only config.",
+  "private_mapping_config": "config/identity-provider-claims.config.json",
+  "access_rule": "All external identity providers are allowed only when the stable provider GUID or subject maps to the authorized member GUID for christian@thevlsc.com.",
+  "worker_endpoints": {
+    "policy": "https://api.thevlsc.com/user_role/v1/identity/policy",
+    "providers": "https://api.thevlsc.com/user_role/v1/identity/providers",
+    "evaluate": "https://api.thevlsc.com/user_role/v1/identity/evaluate",
+    "development_providers": "https://mcp.thevlsc.com/v1/identity/providers"
+  },
+  "cloudflare_access_identity_providers": [
+    {
+      "name": "Cloudflare",
+      "type": "cloudflare",
+      "status": "available"
+    },
+    {
+      "name": "One-time PIN",
+      "type": "onetimepin",
+      "status": "available"
+    },
+    {
+      "name": "GitHub",
+      "type": "github",
+      "status": "available"
+    },
+    {
+      "name": "Azure AD",
+      "type": "azureAD",
+      "status": "available"
+    },
+    {
+      "name": "Google",
+      "type": "google",
+      "status": "available"
+    }
+  ],
+  "platform_targets": [
+    {
+      "platform": "Cloudflare",
+      "desired_access": "Access applications, Workers, DNS, AI Gateway, and API routes for the primary DNS-domain identity.",
+      "current_status": "Cloudflare Access IDPs available; application enforcement still pending for admin/dev routes."
+    },
+    {
+      "platform": "GitHub",
+      "desired_access": "Repository and organization access for the primary DNS-domain identity and approved linked IDPs.",
+      "current_status": "Local Git commit path configured; CLI push is pending local GitHub authentication."
+    },
+    {
+      "platform": "Microsoft Entra ID / Azure",
+      "desired_access": "ChatVLSC app registration, app roles, consent scopes, redirect URIs, and branding.",
+      "current_status": "Read verified; write attempt blocked by Authorization_RequestDenied until Application.ReadWrite.All or app admin role is available."
+    },
+    {
+      "platform": "Notion",
+      "desired_access": "Workspace documentation and approval control surface for ChatVLSC configuration.",
+      "current_status": "Documentation updates are available through the connected Notion workspace."
+    },
+    {
+      "platform": "Zapier MCP",
+      "desired_access": "Connector workflow access for Entra, OneDrive, SharePoint, Outlook, To Do, and Notion review actions.",
+      "current_status": "Connector usage is documented; execution remains gated by workspace credits and explicit authorization for write actions."
+    },
+    {
+      "platform": "OpenAI console and API platforms",
+      "desired_access": "Organization/workspace console and API access for the primary DNS-domain identity and approved linked IDPs.",
+      "current_status": "Domain verification records are present; direct console/org membership changes require OpenAI admin console access."
+    }
+  ],
+  "non_goals_for_public_config": [
+    "Do not publish alternate personal account identifiers to GitHub or public Worker endpoints.",
+    "Do not store platform API keys, OAuth client secrets, service tokens, or recovery codes.",
+    "Do not grant platform access without platform-native admin approval and audit logging."
+  ]
+}

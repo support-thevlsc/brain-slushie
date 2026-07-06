@@ -23,6 +23,8 @@
       "configuration": "GET /mcp/config",
       "developmentConfiguration": "GET /v1/mcp/config",
       "securityRouteMap": "GET /security/route-map",
+      "securityHeaders": "GET /security/headers",
+      "identityProviders": "GET /identity/providers",
       "health": "GET /health",
       "ocrStatus": "GET /ocr/status",
       "ocrSchema": "GET /ocr/schema",

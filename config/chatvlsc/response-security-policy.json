@@ -6,6 +6,8 @@
   "updated_at": "2026-07-05T21:08:00-05:00",
   "scope": {
     "worker": "vlsc-user-role-mcp",
+    "policy_endpoint": "https://api.thevlsc.com/user_role/v1/security/headers",
+    "development_policy_endpoint": "https://mcp.thevlsc.com/v1/security/headers",
     "routes": [
       "api.thevlsc.com/user_role/v1*",
       "api.thevlsc.com/admin/v1*",
