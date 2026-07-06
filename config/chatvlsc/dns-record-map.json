@@ -1,7 +1,7 @@
 {
   "$schema": "https://thevlsc.com/schemas/dns-record-map.schema.json",
   "name": "ChatVLSC DNS Record Map",
-  "updated_at": "2026-07-05T20:21:55.3002163-05:00",
+  "updated_at": "2026-07-05T20:53:57.8909576-05:00",
   "zone": {
     "name": "thevlsc.com",
     "id": "4d161a72527e3f04ba46f7231b84f63b"
@@ -9,13 +9,16 @@
   "changes": {
     "risk_level": 2,
     "mode": "comments_only",
+    "tags_attempted": false,
     "records_created": 0,
+    "records_updated": 2,
     "records_deleted": 0,
     "routing_changed": false,
     "notes": [
       "Cloudflare DNS tags are not enabled for this zone.",
       "Cloudflare DNS comments are limited to 100 characters.",
-      "Root AAAA placeholder is read-only and was not modified."
+      "Root AAAA placeholder is read-only and was not modified.",
+      "Microsoft 365 MX and SPF records were updated with comments only."
     ]
   },
   "worker_hosts": [
@@ -41,22 +44,69 @@
       "comment": "ChatVLSC Worker login route /auth/v1*. Validate callbacks server-side."
     }
   ],
+  "mail_authentication_records": [
+    {
+      "name": "thevlsc.com",
+      "type": "MX",
+      "provider": "Microsoft 365",
+      "content_policy": "public_mail_routing_value_not_republished_in_config",
+      "comment": "Microsoft 365 mail routing for thevlsc.com. No secret in DNS."
+    },
+    {
+      "name": "thevlsc.com",
+      "type": "TXT",
+      "provider": "Microsoft 365 SPF",
+      "content_policy": "public_mail_policy_value_not_republished_in_config",
+      "comment": "SPF for Microsoft 365 outbound mail. Public policy, not a secret."
+    }
+  ],
   "verification_records": [
     {
+      "name": "thevlsc.com",
+      "type": "TXT",
       "provider": "OpenAI",
-      "content_policy": "public_verification_value_not_republished_in_config"
+      "content_policy": "public_verification_value_not_republished_in_config",
+      "comment": "OpenAI domain verification for ChatVLSC workspace. Public TXT, not a secret."
     },
     {
+      "name": "thevlsc.com",
+      "type": "TXT",
+      "provider": "OpenAI",
+      "content_policy": "public_verification_value_not_republished_in_config",
+      "comment": "OpenAI domain verification for VLSC organization. Public TXT, not a secret."
+    },
+    {
+      "name": "thevlsc.com",
+      "type": "TXT",
       "provider": "Microsoft",
-      "content_policy": "public_verification_value_not_republished_in_config"
+      "content_policy": "public_verification_value_not_republished_in_config",
+      "comment": "Microsoft domain verification for ChatVLSC/Entra. Public TXT, not a secret."
     },
     {
+      "name": "thevlsc.com",
+      "type": "TXT",
       "provider": "Notion",
-      "content_policy": "public_verification_value_not_republished_in_config"
+      "content_policy": "public_verification_value_not_republished_in_config",
+      "comment": "Notion domain verification for ChatVLSC docs. Public TXT, not a secret."
     },
     {
+      "name": "thevlsc.com",
+      "type": "TXT",
       "provider": "Apple",
-      "content_policy": "public_verification_value_not_republished_in_config"
+      "content_policy": "public_verification_value_not_republished_in_config",
+      "comment": "Apple domain verification for identity/email. Public TXT, not a secret."
+    }
+  ],
+  "pending_dns_review": [
+    {
+      "item": "OpenAI domain_pk values",
+      "status": "not_added",
+      "reason": "domain_pk identifiers are not enough to infer a DNS TXT record value without provider-issued DNS instructions."
+    },
+    {
+      "item": "Cloudflare Access DNS changes",
+      "status": "not_needed",
+      "reason": "Access protects existing proxied hostnames without creating new DNS records."
     }
   ]
 }
