@@ -1,0 +1,96 @@
+{
+  "$schema": "https://thevlsc.com/schemas/secure-api-route-map.schema.json",
+  "name": "ChatVLSC Secure API Route and Tunnel Map",
+  "generated_at": "2026-07-05T20:21:55.3002163-05:00",
+  "cloudflare_account_id": "3213c2f6b79055d92921a6b81d1bedeb",
+  "zone": {
+    "name": "thevlsc.com",
+    "id": "4d161a72527e3f04ba46f7231b84f63b"
+  },
+  "worker": {
+    "name": "vlsc-user-role-mcp",
+    "last_observed_deployment": {
+      "id": "b31438fe-b3b3-4b1f-ae16-40282ce1632d",
+      "version_id": "a712d815-fa02-465f-8be2-2152dcc3bdeb",
+      "source": "api",
+      "created_on": "2026-07-06T01:35:11.722498Z",
+      "observed_at": "2026-07-05T20:36:00-05:00"
+    }
+  },
+  "dns": {
+    "record_map": "config/chatvlsc/dns-record-map.json",
+    "mode": "comments_only",
+    "routing_changed": false,
+    "worker_hosts": [
+      "api.thevlsc.com",
+      "mcp.thevlsc.com",
+      "chatvlsc.thevlsc.com"
+    ],
+    "verification_providers": [
+      "OpenAI",
+      "Microsoft",
+      "Notion",
+      "Apple"
+    ]
+  },
+  "routes": [
+    {
+      "pattern": "api.thevlsc.com/user_role/v1*",
+      "class": "service_api",
+      "public": false,
+      "recommended_auth": "Bearer token or Cloudflare Access service-token enforcement",
+      "secret_handling": "Authorization headers or Worker secrets only"
+    },
+    {
+      "pattern": "api.thevlsc.com/admin/v1*",
+      "class": "admin_api",
+      "public": false,
+      "recommended_auth": "Cloudflare Access plus Worker-side Entra role checks",
+      "secret_handling": "Worker secrets or Cloudflare Access service credentials only"
+    },
+    {
+      "pattern": "mcp.thevlsc.com/v1*",
+      "class": "development_mcp",
+      "public": false,
+      "recommended_auth": "Development bearer token or Cloudflare Access service-token policy",
+      "secret_handling": "Do not store credentials in .mcp.json, Notion, or GitHub"
+    },
+    {
+      "pattern": "mcp.thevlsc.com/user_role/auth*",
+      "class": "auth_display",
+      "public": true,
+      "recommended_auth": "Public display allowed; validate callback state and claims server-side",
+      "secret_handling": "Public metadata only"
+    },
+    {
+      "pattern": "chatvlsc.thevlsc.com/auth/v1*",
+      "class": "login_ui",
+      "public": true,
+      "recommended_auth": "Public login screen; validate callbacks server-side",
+      "secret_handling": "No API keys in browser JavaScript"
+    }
+  ],
+  "tunnels": [
+    {
+      "name": "Admin Tunnel",
+      "id": "17f40b5c-193f-4f80-9002-7dd28946f81a",
+      "status": "healthy",
+      "remote_config": true,
+      "recommended_use": "Private origins only; public Worker routes stay on Workers"
+    }
+  ],
+  "key_usage_policy": {
+    "allowed_storage": [
+      "Cloudflare Worker secrets",
+      "Cloudflare Access service-token credentials",
+      "local ignored .dev.vars for development only"
+    ],
+    "disallowed_storage": [
+      "Notion pages",
+      "GitHub repository files",
+      "client-side browser JavaScript",
+      "URL query strings",
+      "MCP display metadata"
+    ]
+  }
+}
