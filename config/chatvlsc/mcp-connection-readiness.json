@@ -185,10 +185,26 @@
     "safe_executor": "scripts/apply-entra-user-role-mcp.ps1"
   },
   "openai_platform": {
-    "status": "blocked_secure_key_setup_connector_or_owner_selection_required",
-    "required_token_handling": "Select one rotated OpenAI API key and store it in Cloudflare Worker secrets or the account Secrets Store only after Cloudflare secret-write authorization is available."
+    "status": "blocked_owner_decision_required_no_local_openai_key",
+    "secure_connector_available": true,
+    "local_presence_check": {
+      "process_env_has_openai_api_key": false,
+      "env_files_checked": [
+        ".env.local",
+        ".env",
+        ".dev.vars"
+      ],
+      "local_env_file_has_openai_api_key": false
+    },
+    "required_token_handling": "Use the secure OpenAI Platform connector to create a new key, or explicitly select one rotated existing key. Store it in Cloudflare Worker secrets or the account Secrets Store only after Cloudflare secret-write authorization is available."
+  },
+  "tracking": {
+    "github_commit": "https://github.com/The-VLSC/brain-slushie/commit/5be07ea5779a088deaba8976018b72d1f57771d4",
+    "linear_issue": "https://linear.app/the-vlsc/issue/THE-5/implement-chatvlsc-secure-mcp-cloudflare-key-store-and-graph-gates",
+    "notion_status": "blocked_current_integration_cannot_find_prior_chatvlsc_progress_page"
   },
   "next_steps": [
+    "Decide whether to create a new OpenAI API key through the secure OpenAI Platform connector or explicitly reuse one rotated existing key.",
     "Authorize Zapier MCP from the connected client before using Zapier tools.",
     "Create or authorize Cloudflare Access service-token policy for api.thevlsc.com/user_role/v1 and mcp.thevlsc.com/v1 clients.",
     "Use a Cloudflare token with Workers secret edit and Secrets Store write permission, then run scripts/import-chatvlsc-cloudflare-secrets.ps1.",
