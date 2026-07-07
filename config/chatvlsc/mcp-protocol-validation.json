@@ -2,7 +2,7 @@
   "$schema": "https://thevlsc.com/schemas/mcp-protocol-validation.schema.json",
   "name": "ChatVLSC MCP Protocol Validation",
   "status": "local_protocol_passed_production_auth_gated",
-  "checked_at": "2026-07-07T10:04:00-05:00",
+  "checked_at": "2026-07-07T10:10:59-05:00",
   "risk_level": 5,
   "source_scope": {
     "worker_source": "C:\\Users\\chris\\Documents\\Cloudfare.config\\src\\index.js",
@@ -43,7 +43,9 @@
       }
     ],
     "mutating_tools_enabled": false,
-    "secret_values_returned": false
+    "secret_values_returned": false,
+    "validation_script": "scripts/test-chatvlsc-mcp-protocol.ps1",
+    "validation_command": "powershell -ExecutionPolicy Bypass -File scripts/test-chatvlsc-mcp-protocol.ps1 -BaseUrl http://127.0.0.1:8789"
   },
   "local_probe_results": [
     {
@@ -90,8 +92,31 @@
       "has_jsonrpc": true,
       "has_result": true,
       "marker": "allow"
+    },
+    {
+      "name": "plan_file_sort",
+      "url": "http://127.0.0.1:8789/v1/",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "has_jsonrpc": true,
+      "has_result": true,
+      "marker": "plan_ready;operations=1"
     }
   ],
+  "local_harness_summary": {
+    "ok": true,
+    "base_url": "http://127.0.0.1:8789",
+    "passed": 6,
+    "failed": 0,
+    "checks": [
+      "current_initialize",
+      "alpha_initialize",
+      "tools_list",
+      "get_service_status",
+      "evaluate_identity_claims",
+      "plan_file_sort"
+    ]
+  },
   "production_probe_status": {
     "current_endpoint": "cloudflare_access_required",
     "alpha_endpoint": "cloudflare_access_required",
