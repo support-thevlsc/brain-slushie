@@ -140,6 +140,7 @@
   ],
   "access": {
     "current_custom_hostname_protection": "not_configured",
+    "mcp_service_auth_plan": "config/chatvlsc/cloudflare-access-mcp.plan.json",
     "existing_applications": [
       {
         "name": "Warp Login App",
@@ -159,6 +160,12 @@
         "domain": "mcp.thevlsc.com/v1*",
         "policy": "Allow development MCP clients through service-token or explicit identity-provider policy.",
         "status": "pending_owner_approval"
+      },
+      {
+        "name": "ChatVLSC Current MCP",
+        "domain": "api.thevlsc.com/user_role/v1*",
+        "policy": "Allow approved service-token clients only for machine-to-machine MCP access.",
+        "status": "planned_in_config_chatvlsc_cloudflare_access_mcp_plan"
       }
     ]
   },
