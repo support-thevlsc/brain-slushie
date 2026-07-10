@@ -4,9 +4,12 @@
   "status": "developer_mode_ready_pending_openai_console_creation",
   "risk_level": 4,
   "app_name": "ChatVLSC",
+  "mcp_server_name": "chatvlsc.thevlsc.mcp",
+  "secondary_app_name": "RLI Assistant",
+  "secondary_mcp_server_name": "rli_assistant",
   "archetype": "interactive-decoupled",
-  "mcp_server_url": "https://mcp.thevlsc.com/v1/",
-  "review_mcp_server_url": "https://mcp.thevlsc.com/v1/",
+  "mcp_server_url": "https://api.thevlsc.com/user_role/v1/",
+  "review_mcp_server_url": "https://api.thevlsc.com/user_role/v1/",
   "production_domains": [
     "mcp.thevlsc.com",
     "api.thevlsc.com",
@@ -32,10 +35,19 @@
       }
     },
     {
+      "name": "get_workspace_access_reconciliation",
+      "description": "Use this when ChatGPT needs the least-workspace IDP/access reconciliation gates for ChatVLSC.",
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
       "name": "evaluate_identity_claims",
       "description": "Use this when ChatGPT needs a non-persistent allow or deny decision for supplied identity claims.",
       "annotations": {
-        "readOnlyHint": false,
+        "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
@@ -45,7 +57,7 @@
       "name": "plan_file_sort",
       "description": "Use this when ChatGPT needs to classify files into a proposed directory plan without moving files.",
       "annotations": {
-        "readOnlyHint": false,
+        "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
@@ -53,7 +65,7 @@
     }
   ],
   "widget_resource_policy": {
-    "csp_source": "config/response-security-policy.json",
+    "csp_source": "config/chatvlsc/response-security-policy.json",
     "connect_domains": [
       "https://api.thevlsc.com",
       "https://mcp.thevlsc.com",
@@ -67,6 +79,8 @@
   "openai_docs_used": [
     "https://developers.openai.com/apps-sdk/build/mcp-server",
     "https://developers.openai.com/apps-sdk/build/chatgpt-ui",
+    "https://developers.openai.com/apps-sdk/reference",
+    "https://developers.openai.com/apps-sdk/plan/tools",
     "https://developers.openai.com/apps-sdk/deploy/submission",
     "https://developers.openai.com/apps-sdk/guides/security-privacy"
   ],
@@ -75,5 +89,7 @@
     "console_creation": "pending_openai_platform_admin_access",
     "app_submission": "not_submitted"
   },
-  "submission_note": "This config is readiness metadata for ChatGPT Developer Mode and OpenAI Platform review. It does not prove that the app was created in the OpenAI console."
+  "submission_note": "This config is readiness metadata for the primary ChatVLSC MCP app on api.thevlsc.com/user_role/v1. The mcp.thevlsc.com/v1 route is RLI Assistant; the legacy chatvlsc_dev client key remains only for compatibility.",
+  "rli_assistant_mcp_server_url": "https://mcp.thevlsc.com/v1/",
+  "development_mcp_server_url": "https://mcp.thevlsc.com/v1/"
 }

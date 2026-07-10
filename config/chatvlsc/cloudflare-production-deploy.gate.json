@@ -1,0 +1,94 @@
+{
+  "$schema": "https://thevlsc.com/schemas/cloudflare-production-deploy-gate.schema.json",
+  "name": "ChatVLSC Cloudflare Production Deploy Gate",
+  "checked_at": "2026-07-10T10:13:40.5825898-05:00",
+  "status": "blocked_not_authenticated",
+  "worker": {
+    "name": "vlsc-user-role-mcp",
+    "id": "91640dd38e074604bec987feeec1739d",
+    "account_id": "3213c2f6b79055d92921a6b81d1bedeb"
+  },
+  "mcp_server_name": "chatvlsc.thevlsc.mcp",
+  "primary_chatvlsc_route": "https://api.thevlsc.com/user_role/v1",
+  "secondary_mcp_server_name": "rli_assistant",
+  "secondary_route_name": "RLI Assistant",
+  "secondary_route": "https://mcp.thevlsc.com/v1/",
+  "legacy_secondary_alias": "chatvlsc_dev",
+  "local_source_status": {
+    "dry_run": "passed",
+    "command": "pnpm run check",
+    "deploy_gate_validator": "pnpm run test:deploy-gate",
+    "deploy_gate_validator_status": "passed_validate_only_blocked_not_authenticated",
+    "mcp_protocol": "local_current_chatvlsc_protocol_passed",
+    "tool_count": 5,
+    "validated_primary_tool_call_path": "/user_role/v1",
+    "validated_tools": [
+      "get_service_status",
+      "get_identity_policy",
+      "get_workspace_access_reconciliation",
+      "evaluate_identity_claims",
+      "plan_file_sort"
+    ]
+  },
+  "wrangler_auth": {
+    "command": "pnpm run test:deploy-gate",
+    "status": "not_authenticated",
+    "message": "Wrangler whoami check is not authenticated; raw whoami output is not stored.",
+    "deploy_attempted": false
+  },
+  "local_secret_presence": {
+    "CLOUDFLARE_API_TOKEN": false,
+    "CF_API_TOKEN": false,
+    "CF_ACCESS_CLIENT_ID": false,
+    "CF_ACCESS_CLIENT_SECRET": false,
+    "stores_secret_values": false
+  },
+  "live_worker_recheck": {
+    "source": "Cloudflare Observability worker code read",
+    "status": "stale_vs_local",
+    "observed_at": "2026-07-10T10:11:44.6465590-05:00",
+    "evidence": "Live Worker code does not include the current MCP JSON-RPC reconciliation surface, chatvlsc.thevlsc.mcp alias metadata, RLI Assistant metadata, or current Workers AI route naming.",
+    "current_local_markers_missing_live": [
+      "chatvlsc.thevlsc.mcp",
+      "rli_assistant",
+      "RLI Assistant",
+      "get_workspace_access_reconciliation",
+      "GET /identity/reconciliation",
+      "tool_count: 5",
+      "Cloudflare Workers AI /workers-ai routes"
+    ]
+  },
+  "workers_builds_recheck": {
+    "observed_at": "2026-07-10T10:11:44.6465590-05:00",
+    "worker_id": "91640dd38e074604bec987feeec1739d",
+    "build_count": 0,
+    "status": "no_builds_returned"
+  },
+  "required_next_gate": {
+    "preferred": "Authenticate Wrangler with the approved Cloudflare account, then run pnpm run deploy.",
+    "token_mode": "Set a scoped Cloudflare token outside source only if it has Worker deploy permissions, then run pnpm run deploy.",
+    "post_deploy_validation": [
+      "pnpm run test:connectivity",
+      "pnpm run test:deploy-gate",
+      "pnpm run test:mcp:production after CF_ACCESS_CLIENT_ID and CF_ACCESS_CLIENT_SECRET are loaded from an approved secret store",
+      "Cloudflare worker code recheck confirms get_workspace_access_reconciliation and /identity/reconciliation are live"
+    ]
+  },
+  "last_validator_result": {
+    "ok": true,
+    "checked_at": "2026-07-10T10:13:40.5825898-05:00",
+    "deploy_ready": false,
+    "status": "blocked_not_authenticated",
+    "passed": 5,
+    "failed": 0,
+    "deploy_attempted": false,
+    "stores_secret_values": false,
+    "stores_wrangler_whoami_output": false
+  },
+  "changes_not_applied": [
+    "No production deploy was run.",
+    "No Cloudflare Access app, policy, or service token was created.",
+    "No Cloudflare API token or Access service-token secret was written to source.",
+    "No users or IDP accounts were granted access."
+  ]
+}

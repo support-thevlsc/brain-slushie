@@ -23,13 +23,17 @@ Sanitized ChatVLSC route and MCP configuration lives under `config/chatvlsc/`.
 
 Do not commit Cloudflare, OpenAI, tunnel, Zapier, Notion, or Entra secrets. Public files may include endpoint names, route classes, and policy intent only.
 
-Cloudflare secret storage is planned in `config/chatvlsc/cloudflare-secret-storage.plan.json`. Current Cloudflare token candidates from `Keys.zip` authenticate account lookup but are denied for Worker secrets and Secrets Store operations, so no secret values are stored in this repository.
+Cloudflare secret storage is planned in `config/chatvlsc/cloudflare-secret-storage.plan.json`. Prior local token candidates authenticated account lookup but were denied for Worker secrets and Secrets Store operations, so no secret values are stored in this repository.
 
-MCP connection readiness is tracked in `config/chatvlsc/mcp-connection-readiness.json`. Local Worker protocol validation is tracked in `config/chatvlsc/mcp-protocol-validation.json`: `initialize`, `tools/list`, and sample `tools/call` requests pass locally for current and alpha paths using the Cloudflare workspace harness `scripts/test-chatvlsc-mcp-protocol.ps1`. Production endpoints remain gated by Cloudflare Access; Zapier MCP is configured locally and requires Zapier authorization before tool use.
+MCP connection readiness is tracked in `config/chatvlsc/mcp-connection-readiness.json`. Local Worker protocol validation is tracked in `config/chatvlsc/mcp-protocol-validation.json`: `initialize`, `tools/list`, and sample `tools/call` requests pass locally for primary ChatVLSC current, with `/v1/` named `RLI Assistant`, using the Cloudflare workspace harness `scripts/test-chatvlsc-mcp-protocol.ps1`. Production endpoints remain gated by Cloudflare Access; Zapier MCP is configured locally and requires Zapier authorization before tool use.
 
-Cloudflare Access service-auth planning is tracked in `config/chatvlsc/cloudflare-access-mcp.plan.json`. The plan protects current, alpha, and admin MCP/API paths with Cloudflare Access Service Auth and keeps service-token credentials out of GitHub, Notion, Linear, MCP metadata, and browser-delivered JavaScript.
+Cloudflare Access service-auth planning is tracked in `config/chatvlsc/cloudflare-access-mcp.plan.json`. The plan protects primary ChatVLSC current, RLI Assistant, and admin MCP/API paths with Cloudflare Access Service Auth and keeps service-token credentials out of GitHub, Notion, Linear, MCP metadata, and browser-delivered JavaScript.
 
-Secure connectivity verification is tracked in `config/chatvlsc/secure-connectivity-gate.config.json`. The local gate checks MCP client config, Cloudflare One/cloudflared service health, protected ChatVLSC current/alpha endpoint behavior, and Zapier OAuth gating without storing response bodies, redirect URLs, or secrets.
+Cloudflare Access plan validation is validate-only by default through `pnpm run test:access-plan`; remote Cloudflare reads and writes prefer `CLOUDFLARE_API_TOKEN` from the local environment and still require Access apps/policies plus service-token permissions.
+
+Production deploy readiness is validate-only through `pnpm run test:deploy-gate`; it checks route/script/source-marker readiness and Wrangler auth state without attempting a deploy or storing secret values.
+
+Secure connectivity verification is tracked in `config/chatvlsc/secure-connectivity-gate.config.json`. The local gate checks MCP client config, Cloudflare One/cloudflared service health, protected primary ChatVLSC current and RLI Assistant endpoint behavior, and Zapier OAuth gating without storing response bodies, redirect URLs, or secrets.
 
 The end-to-end connection flow map is tracked in `config/chatvlsc/mcp-connection-flow-map.md`.
 
@@ -39,6 +43,9 @@ Public homepage routing is published as sanitized DNS metadata: `www.thevlsc.com
 
 Staged verification and ChatGPT app readiness are documented without secrets:
 
-- Staged configuration endpoint: `https://mcp.thevlsc.com/v1/configuration/staged`
-- ChatGPT app readiness endpoint: `https://mcp.thevlsc.com/v1/chatgpt/app/readiness`
-- MCP server URL for Developer Mode review: `https://mcp.thevlsc.com/v1/`
+- Staged configuration endpoint: `https://api.thevlsc.com/user_role/v1/configuration/staged`
+- ChatGPT app readiness endpoint: `https://api.thevlsc.com/user_role/v1/chatgpt/app/readiness`
+- MCP server URL for Developer Mode review: `https://api.thevlsc.com/user_role/v1/`
+- Secondary app: `RLI Assistant`
+- Secondary MCP URL: `https://mcp.thevlsc.com/v1/`
+- Legacy local alias: `chatvlsc_dev`

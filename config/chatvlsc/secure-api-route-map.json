@@ -18,7 +18,7 @@
     }
   },
   "dns": {
-    "record_map": "config/chatvlsc/dns-record-map.json",
+    "record_map": "config/dns-record-map.json",
     "updated_at": "2026-07-05T20:53:57.8909576-05:00",
     "mode": "comments_only",
     "routing_changed": false,
@@ -70,14 +70,13 @@
       "pattern": "mcp.thevlsc.com/v1*",
       "route_id": "e7bb2fc74edf46768f087d359fe7d2a0",
       "script": "vlsc-user-role-mcp",
-      "class": "development_mcp",
+      "class": "rli_assistant_mcp",
       "public": false,
       "recommended_auth": [
-        "Development-only bearer token",
         "Cloudflare Access service token before broader client testing",
-        "MCP client allowlist during development"
+        "RLI Assistant MCP client allowlist"
       ],
-      "secret_handling": "Do not store development MCP credentials in .mcp.json, Notion, or GitHub.",
+      "secret_handling": "Do not store RLI Assistant MCP credentials in .mcp.json, Notion, or GitHub.",
       "verified_endpoints": [
         "https://mcp.thevlsc.com/v1/health",
         "https://mcp.thevlsc.com/v1/mcp/config"
@@ -156,16 +155,16 @@
         "status": "pending_owner_approval"
       },
       {
-        "name": "ChatVLSC Development MCP",
+        "name": "RLI Assistant MCP",
         "domain": "mcp.thevlsc.com/v1*",
-        "policy": "Allow development MCP clients through service-token or explicit identity-provider policy.",
+        "policy": "Allow RLI Assistant MCP clients through service-token or explicit identity-provider policy.",
         "status": "pending_owner_approval"
       },
       {
         "name": "ChatVLSC Current MCP",
         "domain": "api.thevlsc.com/user_role/v1*",
         "policy": "Allow approved service-token clients only for machine-to-machine MCP access.",
-        "status": "planned_in_config_chatvlsc_cloudflare_access_mcp_plan"
+        "status": "planned_in_config_cloudflare_access_mcp_plan"
       }
     ]
   },
@@ -182,7 +181,7 @@
       "client-side browser JavaScript",
       "URL query strings",
       "MCP display metadata",
-      "mixed login handoff captures such as ChatVLSC Token.txt"
+      "mixed login handoff captures"
     ],
     "cloudflare_key_store_status": {
       "worker_secret_permission": "denied_code_10000",
@@ -221,7 +220,7 @@
     "Keep the public homepage route on the dedicated homepage Worker and the API/admin/MCP/auth prefixes on the user-role MCP Worker.",
     "Use one normalized Worker route handler for /user_role/v1, /admin/v1, /v1, /auth/v1, and /user_role/auth prefixes.",
     "Set assets.run_worker_first=true so API and MCP routes enter Worker code before static asset lookup; /assets/* remains served through the ASSETS binding.",
-    "Require Access or equivalent Worker-side bearer-token enforcement before treating admin and development MCP endpoints as protected.",
+    "Require Access or equivalent Worker-side bearer-token enforcement before treating admin and RLI Assistant MCP endpoints as protected.",
     "Do not use mixed ChatVLSC Token handoff text for Microsoft Graph; require a clean Graph token with Application.ReadWrite.All.",
     "Keep sanitized endpoint maps in GitHub and Notion; keep credentials only in secret stores.",
     "Preserve request_limit_fail_open=false on all Worker routes."

@@ -1,0 +1,210 @@
+{
+  "$schema": "https://thevlsc.com/schemas/chatvlsc-goal-completion-audit.schema.json",
+  "name": "ChatVLSC active goal completion audit",
+  "checked_at": "2026-07-10T09:57:22.6908107-05:00",
+  "status": "incomplete_external_gates_open",
+  "target_ready_by": "2026-07-10T12:00:00-05:00",
+  "primary_mcp_server_name": "chatvlsc.thevlsc.mcp",
+  "primary_mcp_server": "https://api.thevlsc.com/user_role/v1",
+  "secondary_mcp_server_name": "rli_assistant",
+  "secondary_mcp_server": "https://mcp.thevlsc.com/v1/",
+  "secondary_renamed_from": "legacy_non_primary_chatvlsc_name",
+  "legacy_secondary_alias": "chatvlsc_dev",
+  "goal_completion": {
+    "achieved": false,
+    "reason": "Local configuration and review evidence improved, but production deploy, Cloudflare Access service auth, OpenAI Platform reauthentication, Zapier action exposure, Slack target, Figma target, and IDP reconciliation remain unproven or externally gated.",
+    "do_not_mark_complete_until": [
+      "Current Worker code is live on vlsc-user-role-mcp and contains chatvlsc.thevlsc.mcp plus the MCP JSON-RPC reconciliation surface.",
+      "Cloudflare Access service-token or approved identity policy exists and authenticated MCP probes pass without storing secrets.",
+      "OpenAI Platform connector reauth succeeds and the selected organization/project/app target is recorded without exposing keys.",
+      "Zapier MCP action tools are exposed and a non-mutating readiness/action-schema check succeeds.",
+      "Slack destination is identified or explicitly ruled out.",
+      "Figma file/design target is provided or explicitly ruled out.",
+      "IDP account mismatches are reconciled and approved before grants.",
+      "Any workspace access changes are proven from platform-native evidence, not only local plans."
+    ]
+  },
+  "latest_tracker_checkpoint": {
+    "posted_at": "2026-07-10T09:57:22.6908107-05:00",
+    "notion_comment_id": "399eac9b-82e9-81b3-a374-001d1a9be6b7",
+    "linear_comment_id": "dc86e9a3-76c9-4628-90ea-1fab32ede394",
+    "airtable_comment_id": "comBTilc5yqPF6aX7",
+    "slack_status": "no_matching_channel_found",
+    "openai_platform_status": "reauth_required",
+    "cloudflare_agent_setup_source": "https://developers.cloudflare.com/agent-setup/prompt.md",
+    "latest_rli_assistant_notion_comment_id": "399eac9b-82e9-81ed-90a3-001de314bd2c",
+    "latest_rli_assistant_linear_comment_id": "e5866698-abde-45a3-8282-fed9552f8767",
+    "replit_status": "no_matching_chatvlsc_app_found_no_changes_applied"
+  },
+  "latest_local_hardening": {
+    "cloudflare_access_plan_validation": "passed_validate_only_no_token_reads",
+    "secret_importer_validation": "passed_validate_only_env_token_missing_no_secret_values_stored",
+    "public_secret_source_scan": "passed_no_local_archive_or_entry_filenames",
+    "legacy_route_parameter_scan": "passed_no_alpha_route_parameter"
+  },
+  "requirements": [
+    {
+      "requirement": "Review all recent changes made in the last 12 hours.",
+      "status": "partially_proved",
+      "current_evidence": [
+        "config/recent-change-access-review.json covers the 2026-07-09T21:57:22.6908107-05:00 to 2026-07-10T09:57:22.6908107-05:00 window.",
+        "Filesystem mtime review found recent local and public mirror edits in scripts, source, config, docs, README, and workspace MCP config within that window.",
+        "Recent artifacts and sanitized mirror files were updated with current connector and deploy gates."
+      ],
+      "remaining_evidence_required": [
+        "A clean root Git status is unavailable because the root .git directory is not a valid usable repository in this shell.",
+        "Nested public mirror git status remains dirty and must be committed/pushed only after user approval and final secret scan."
+      ]
+    },
+    {
+      "requirement": "Use available Notion, Linear, and Airtable workspaces as audit/status surfaces.",
+      "status": "proved_for_current_checkpoint",
+      "current_evidence": [
+        "Notion comment 399eac9b-82e9-81b3-a374-001d1a9be6b7 was created on the existing review page.",
+        "Linear comment dc86e9a3-76c9-4628-90ea-1fab32ede394 was created on THE-5.",
+        "Airtable comment comBTilc5yqPF6aX7 was created on the existing review record."
+      ],
+      "remaining_evidence_required": [
+        "Future access changes must continue to be logged after platform-native changes actually occur."
+      ]
+    },
+    {
+      "requirement": "Use Slack connector/workspace when a target exists.",
+      "status": "incomplete_target_missing",
+      "current_evidence": [
+        "Slack channel search for chatvlsc thevlsc mcp returned no results."
+      ],
+      "remaining_evidence_required": [
+        "Provide or discover an existing Slack channel or explicitly decide not to use Slack for this workflow.",
+        "Do not create a duplicate Slack workspace."
+      ]
+    },
+    {
+      "requirement": "Use OpenAI Platform and OpenAI Developers connector for ChatGPT app/key target work.",
+      "status": "blocked_reauth_required",
+      "current_evidence": [
+        "OpenAI Platform target listing returned UNAUTHORIZED / TRIGGER_REAUTHENTICATION.",
+        "A raw key appeared in referenced thread history; it was not reused, repeated, or written to source."
+      ],
+      "remaining_evidence_required": [
+        "OpenAI Platform reauthentication succeeds.",
+        "Organization/project/app target is selected through the secure connector flow.",
+        "No plaintext key is exposed in chat, files, trackers, or public mirrors."
+      ]
+    },
+    {
+      "requirement": "Use Cloudflare and cloudflared to optimize mcp.thevlsc.com MCP connectivity.",
+      "status": "local_ready_production_deploy_gated",
+      "current_evidence": [
+        "pnpm run check passed with Wrangler dry-run.",
+        "pnpm run test:access-plan passed in validate-only mode without token reads or remote writes.",
+        "pnpm run test:deploy-gate passed validate-only at 2026-07-10T10:05:37.1603700-05:00 with deploy_ready=false and blocked_not_authenticated.",
+        "pnpm run test:connectivity passed 10/0 at 2026-07-10T10:02:40.5067390-05:00.",
+        "Cloudflare WARP, CloudflareWARPUpdater, and cloudflared were running during the connectivity gate.",
+        "Workspace and WARP MCP configs now include rli_assistant without credentials.",
+        "Cloudflare can read vlsc-user-role-mcp, but live code is stale versus local."
+      ],
+      "remaining_evidence_required": [
+        "Authenticate Wrangler or provide a scoped deploy token outside source.",
+        "Deploy current Worker or trigger a Cloudflare build.",
+        "Recheck live Worker code for chatvlsc.thevlsc.mcp, /identity/reconciliation, and get_workspace_access_reconciliation."
+      ]
+    },
+    {
+      "requirement": "Use tunnel-client/cmd/client for MCP profile readiness.",
+      "status": "planned_not_applied",
+      "current_evidence": [
+        "tunnel-client/cmd/client exists locally.",
+        "config/tunnel-client-chatvlsc-mcp.profile.example.yaml uses environment references for Cloudflare Access headers."
+      ],
+      "remaining_evidence_required": [
+        "Approved Cloudflare Access service-token header source exists.",
+        "A real tunnel-client profile is created or selected without storing secrets.",
+        "Authenticated tunnel-client MCP probe succeeds."
+      ]
+    },
+    {
+      "requirement": "Use Add Zapier MCP server thread evidence and optimize Zapier MCP access.",
+      "status": "configured_but_current_action_tools_missing",
+      "current_evidence": [
+        "Thread 019f3172-cc28-7731-82d5-b44503e946c0 records the Zapier MCP URL https://mcp.zapier.com/api/v1/connect.",
+        "Current connectivity gate shows Zapier MCP is reachable but unauthenticated.",
+        "Current tool discovery exposes no Zapier action tools."
+      ],
+      "remaining_evidence_required": [
+        "Zapier MCP OAuth/action tools are exposed in the current session.",
+        "Non-mutating action schema or readiness call succeeds.",
+        "Any automation execution receives explicit approval."
+      ]
+    },
+    {
+      "requirement": "Use Figma connector if a design or file target is available.",
+      "status": "incomplete_target_missing",
+      "current_evidence": [
+        "Figma tools are exposed in the current session.",
+        "No file key, project, node, or approved design target is available."
+      ],
+      "remaining_evidence_required": [
+        "Provide or create an approved Figma target file before any design write.",
+        "If no design deliverable is required, explicitly record Figma as not applicable."
+      ]
+    },
+    {
+      "requirement": "Enable access to all workspaces while joining users into the least amount of workspaces.",
+      "status": "planned_no_access_changes_applied",
+      "current_evidence": [
+        "config/workspace-access-optimization.plan.json defines one canonical human workspace and scoped service identities.",
+        "config/idp-workspace-reconciliation.matrix.json records no access changes applied."
+      ],
+      "remaining_evidence_required": [
+        "Canonical user and alias identities are resolved.",
+        "Platform-native membership/access evidence is collected after approved changes.",
+        "No duplicate workspace is created unless explicitly approved."
+      ]
+    },
+    {
+      "requirement": "Secure access for all IDP accounts.",
+      "status": "incomplete_identity_reconciliation_open",
+      "current_evidence": [
+        "IDP matrix separates unresolved agent spelling, Google alias, domain GID, admin-domain, and redacted external alias gates.",
+        "No IDP alias, app role, Access policy, or workspace membership was changed."
+      ],
+      "remaining_evidence_required": [
+        "Resolve each identity mismatch from a platform-native source.",
+        "Create or authorize Cloudflare Access policy/service token only after identity approval.",
+        "Run authenticated production MCP probes after credentials are loaded from an approved secret store."
+      ]
+    }
+  ],
+  "no_secret_or_access_changes_applied": [
+    "No raw token from chat or thread history was repeated, written, or published.",
+    "No users were invited or joined to any workspace.",
+    "No Cloudflare Access app, policy, or service token was created.",
+    "No Entra app registration, app role, OAuth scope, or claim setting was changed.",
+    "No OpenAI key, project, or ChatGPT app target was created.",
+    "No Slack channel, Zapier workflow, or Figma file was created or modified.",
+    "Local archive names and token-entry filenames were removed from sanitized public mirror configs."
+  ],
+  "latest_validation": {
+    "json_parse": "passed_47_files",
+    "secret_scan": "passed",
+    "public_sensitive_scan": "passed",
+    "public_secret_source_scan": "passed",
+    "stale_status_scan": "passed",
+    "worker_dry_run": "passed",
+    "access_plan_validate_only": "passed",
+    "deploy_gate_validate_only": "passed_blocked_not_authenticated_no_deploy",
+    "secret_importer_validate_only": "passed_no_token_env_no_secret_values_stored",
+    "connectivity_gate": "passed_10_failed_0_2026-07-10T10:02:40.5067390-05:00",
+    "node_check": "passed"
+  },
+  "next_gate_order": [
+    "Resolve IDP identity mismatches in Notion/Airtable.",
+    "Reauthenticate OpenAI Platform.",
+    "Authenticate Cloudflare deploy path and deploy current Worker.",
+    "Create/select Cloudflare Access service-token credentials outside source.",
+    "Run authenticated MCP production probes.",
+    "Reconnect/expose Zapier MCP action tools.",
+    "Identify Slack and Figma targets or record them as not applicable."
+  ]
+}

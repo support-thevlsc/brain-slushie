@@ -48,7 +48,7 @@
   "platform_targets": [
     {
       "platform": "Cloudflare",
-      "desired_access": "Access applications, Workers, DNS, AI Gateway, and API routes for the primary DNS-domain identity.",
+      "desired_access": "Access applications, Workers, DNS, Workers AI, and API routes for the primary DNS-domain identity.",
       "current_status": "Cloudflare Access IDPs available; application enforcement still pending for admin/dev routes."
     },
     {

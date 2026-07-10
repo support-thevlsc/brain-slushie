@@ -1,20 +1,34 @@
 {
   "$schema": "https://thevlsc.com/schemas/mcp-connection-readiness.schema.json",
   "name": "ChatVLSC MCP Connection Readiness",
-  "status": "local_protocol_verified_production_auth_gated",
-  "checked_at": "2026-07-07T10:30:21-05:00",
+  "status": "local_current_chatvlsc_protocol_verified_production_auth_gated_authenticated_probe_ready",
+  "checked_at": "2026-07-10T10:13:38.8675844-05:00",
   "risk_level": 6,
   "probe_policy": {
-    "mode": "unauthenticated_no_secret_probe",
+    "mode": "unauthenticated_no_secret_probe_with_optional_service_token_probe",
     "follow_redirects": false,
     "stored_response_bodies": false,
-    "stored_redirect_urls": false
+    "stored_redirect_urls": false,
+    "stored_header_values": false,
+    "authenticated_service_token_mode": {
+      "status": "script_ready_not_run",
+      "enabled_by": [
+        "pnpm run test:connectivity -- -UseCloudflareAccessServiceToken",
+        "pnpm run test:mcp:production"
+      ],
+      "header_sources": [
+        "env:CF_ACCESS_CLIENT_ID",
+        "env:CF_ACCESS_CLIENT_SECRET"
+      ]
+    }
   },
   "local_mcp_configuration": [
     {
       "client": "Cloudflare One / Warp global MCP",
       "path": "C:\\Users\\chris\\.warp\\.mcp.json",
       "servers": [
+        "chatvlsc.thevlsc.mcp",
+        "rli_assistant",
         "user_role",
         "Zapier"
       ],
@@ -24,10 +38,30 @@
       "client": "Cloudfare.config workspace MCP",
       "path": "C:\\Users\\chris\\Documents\\Cloudfare.config\\.mcp.json",
       "servers": [
+        "chatvlsc.thevlsc.mcp",
+        "rli_assistant",
         "chatvlsc_dev",
+        "user_role",
         "Zapier"
       ],
-      "stores_credentials": false
+      "stores_credentials": false,
+      "primary_mcp_server_name": "chatvlsc.thevlsc.mcp",
+      "primary_chatvlsc": "https://api.thevlsc.com/user_role/v1",
+      "rli_assistant": "https://mcp.thevlsc.com/v1/",
+      "legacy_secondary_alias": "chatvlsc_dev"
+    },
+    {
+      "client": "tunnel-client ChatVLSC profile example",
+      "path": "C:\\Users\\chris\\Documents\\Cloudfare.config\\config\\tunnel-client-chatvlsc-mcp.profile.example.yaml",
+      "servers": [
+        "https://mcp.thevlsc.com/v1/"
+      ],
+      "stores_credentials": false,
+      "uses_env_secret_references": [
+        "CF_ACCESS_CLIENT_ID",
+        "CF_ACCESS_CLIENT_SECRET",
+        "CONTROL_PLANE_API_KEY"
+      ]
     }
   ],
   "cloudflare_one_client": {
@@ -53,7 +87,7 @@
     "secret_handling": "cloudflared tunnel tokens remain only in service configuration and must not be copied into Worker secrets, GitHub, Notion, or MCP metadata."
   },
   "mcp_protocol_validation": {
-    "status": "local_protocol_passed_production_auth_gated",
+    "status": "local_current_chatvlsc_protocol_passed_production_auth_gated_authenticated_probe_ready",
     "config": "config/chatvlsc/mcp-protocol-validation.json",
     "validated_methods": [
       "initialize",
@@ -62,18 +96,31 @@
     ],
     "validated_tools": [
       "get_service_status",
-      "evaluate_identity_claims"
+      "get_identity_policy",
+      "get_workspace_access_reconciliation",
+      "evaluate_identity_claims",
+      "plan_file_sort"
     ],
-    "tool_count": 4,
+    "tool_count": 5,
     "mutating_tools_enabled": false,
-    "production_retest_required": true
+    "production_retest_required": true,
+    "authenticated_production_validation": {
+      "status": "script_ready_not_run",
+      "command": "pnpm run test:mcp:production",
+      "requires_env": [
+        "CF_ACCESS_CLIENT_ID",
+        "CF_ACCESS_CLIENT_SECRET"
+      ]
+    },
+    "primary_validated_route": "https://api.thevlsc.com/user_role/v1 (current ChatVLSC)",
+    "secondary_compatibility_route": "https://mcp.thevlsc.com/v1/ (RLI Assistant; legacy chatvlsc_dev alias retained)"
   },
   "secure_connectivity_gate": {
-    "status": "passed_without_secrets",
-    "config": "config/chatvlsc/secure-connectivity-gate.config.json",
-    "script": "Cloudfare.config/scripts/test-secure-connectivity.ps1",
+    "status": "passed_without_secrets_authenticated_probe_ready",
+    "config": "config/secure-connectivity-gate.config.json",
+    "script": "scripts/test-secure-connectivity.ps1",
     "risk_level": 6,
-    "checked_at": "2026-07-07T10:30:21-05:00",
+      "checked_at": "2026-07-10T10:13:38.8675844-05:00",
     "validated_checks": [
       "workspace_mcp_config",
       "warp_mcp_config",
@@ -81,8 +128,8 @@
       "cloudflare_services",
       "chatvlsc_current_health",
       "chatvlsc_current_initialize",
-      "chatvlsc_alpha_health",
-      "chatvlsc_alpha_initialize",
+      "rli_assistant_health",
+      "rli_assistant_initialize",
       "zapier_connect_get",
       "zapier_initialize"
     ],
@@ -91,16 +138,33 @@
       "failed": 0,
       "uses_secrets": false,
       "stores_response_bodies": false,
-      "stores_redirect_urls": false
+      "stores_redirect_urls": false,
+      "stores_header_values": false,
+      "authenticated_probe_ready": true,
+      "workspace_servers": [
+        "chatvlsc.thevlsc.mcp",
+        "rli_assistant",
+        "chatvlsc_dev",
+        "user_role",
+        "Zapier"
+      ],
+      "warp_servers": [
+        "chatvlsc.thevlsc.mcp",
+        "rli_assistant",
+        "user_role",
+        "Zapier"
+      ]
     }
   },
   "servers": [
     {
       "name": "ChatVLSC current user-role MCP",
       "mcp_config_name": "user_role",
+      "mcp_alias_name": "chatvlsc.thevlsc.mcp",
       "url": "https://api.thevlsc.com/user_role/v1",
       "configured_in": [
-        "C:\\Users\\chris\\.warp\\.mcp.json"
+        "C:\\Users\\chris\\.warp\\.mcp.json",
+        "C:\\Users\\chris\\Documents\\Cloudfare.config\\.mcp.json"
       ],
       "auth_status": "cloudflare_access_required",
       "probe_results": [
@@ -138,8 +202,9 @@
       "readiness": "local_protocol_verified_but_production_access_requires_cloudflare_access_identity_or_service_token"
     },
     {
-      "name": "ChatVLSC alpha development MCP",
-      "mcp_config_name": "chatvlsc_dev",
+      "name": "RLI Assistant MCP",
+      "mcp_config_name": "rli_assistant",
+      "legacy_mcp_config_name": "chatvlsc_dev",
       "url": "https://mcp.thevlsc.com/v1/",
       "configured_in": [
         "C:\\Users\\chris\\Documents\\Cloudfare.config\\.mcp.json"
@@ -147,7 +212,7 @@
       "auth_status": "cloudflare_access_required",
       "probe_results": [
         {
-          "name": "chatvlsc_alpha_health",
+          "name": "rli_assistant_health",
           "method": "GET",
           "url": "https://mcp.thevlsc.com/v1/health",
           "status": 302,
@@ -157,7 +222,7 @@
           "mcp_marker": false
         },
         {
-          "name": "chatvlsc_alpha_mcp_config",
+          "name": "rli_assistant_mcp_config",
           "method": "GET",
           "url": "https://mcp.thevlsc.com/v1/mcp/config",
           "status": 302,
@@ -167,7 +232,7 @@
           "mcp_marker": false
         },
         {
-          "name": "chatvlsc_alpha_initialize",
+          "name": "rli_assistant_initialize",
           "method": "POST",
           "url": "https://mcp.thevlsc.com/v1/",
           "status": 302,
@@ -213,6 +278,17 @@
       "readiness": "configured_pending_zapier_authorization"
     }
   ],
+  "cloudflare_production_deploy": {
+    "status": "blocked_not_authenticated",
+    "config": "config/chatvlsc/cloudflare-production-deploy.gate.json",
+    "dry_run": "passed",
+    "wrangler_whoami": "not_authenticated",
+    "cloudflare_api_token_env_present": false,
+    "live_worker_code": "stale_vs_local_missing_current_mcp_jsonrpc_reconciliation_surface_chatvlsc_alias_metadata_and_rli_assistant_metadata",
+    "workers_builds": "0_builds_returned_for_vlsc_user_role_mcp",
+    "checked_at": "2026-07-10T10:11:44.6465590-05:00",
+    "deploy_attempted": false
+  },
   "cloudflare_secret_store": {
     "status": "blocked_current_cloudflare_token_lacks_secret_permissions",
     "plan": "config/chatvlsc/cloudflare-secret-storage.plan.json",
@@ -222,13 +298,16 @@
   },
   "microsoft_graph": {
     "status": "blocked_no_clean_graph_access_token_present",
+    "owner_approval": "approved_patch_existing_app",
+    "approved_target_object_id": "9c392dd7-7e0b-49a8-be0e-1269358f6f59",
     "required_token_handling": "Use a clean Microsoft Graph access token or app credential with the required app-registration permissions. Do not reuse mixed login handoff text.",
-    "configuration_target": "config/chatvlsc/entra-user-role-mcp.graph.json",
+    "configuration_target": "config/entra-user-role-mcp.graph.json",
     "safe_executor": "scripts/apply-entra-user-role-mcp.ps1"
   },
   "openai_platform": {
-    "status": "blocked_owner_decision_required_no_local_openai_key",
+    "status": "reauth_required",
     "secure_connector_available": true,
+    "latest_connector_error": "UNAUTHORIZED_TRIGGER_REAUTHENTICATION",
     "local_presence_check": {
       "process_env_has_openai_api_key": false,
       "env_files_checked": [
@@ -238,7 +317,7 @@
       ],
       "local_env_file_has_openai_api_key": false
     },
-    "required_token_handling": "Use the secure OpenAI Platform connector to create a new key, or explicitly select one rotated existing key. Store it in Cloudflare Worker secrets or the account Secrets Store only after Cloudflare secret-write authorization is available."
+    "required_token_handling": "Reauthenticate the OpenAI Platform connector before target selection, app setup, or key work. Do not reuse raw keys pasted in chat; use the secure connector flow and store secrets only after Cloudflare secret-write authorization is available."
   },
   "tracking": {
     "github_commit": "https://github.com/The-VLSC/brain-slushie/commit/397e5c4835d1b978b9dded6a6632df342b7c3174",
@@ -247,16 +326,28 @@
     "notion_review": {
       "page_url": "https://app.notion.com/p/396eac9b82e981938601ee2c11f38556",
       "created_at": "2026-07-07T10:34:16-05:00",
-      "scope": "Secure connectivity gate review for ChatVLSC current, ChatVLSC alpha, Zapier MCP, Cloudflare One, cloudflared, and remaining auth gates.",
+      "latest_comment_id": "399eac9b-82e9-81ed-90a3-001de314bd2c",
+      "latest_comment_at": "2026-07-10T10:00:00-05:00",
+      "scope": "Secure connectivity gate review for primary ChatVLSC current, RLI Assistant, Zapier MCP, Cloudflare One, cloudflared, and remaining auth gates.",
       "secret_values_added": false
-    }
+    },
+    "linear_checkpoint": {
+      "issue": "THE-5",
+      "latest_comment_id": "e5866698-abde-45a3-8282-fed9552f8767",
+      "latest_comment_at": "2026-07-10T10:00:00-05:00"
+    },
+    "replit_status": "no_matching_chatvlsc_app_found_no_changes_applied"
   },
   "next_steps": [
+    "Keep workspace .mcp.json registered with chatvlsc.thevlsc.mcp, primary user_role, RLI Assistant, legacy chatvlsc_dev alias, and Zapier without credentials.",
     "Decide whether to create a new OpenAI API key through the secure OpenAI Platform connector or explicitly reuse one rotated existing key.",
     "Authorize Zapier MCP from the connected client before using Zapier tools.",
-    "Create or authorize Cloudflare Access service-token policy for api.thevlsc.com/user_role/v1 and mcp.thevlsc.com/v1 clients.",
+    "Create or authorize Cloudflare Access service-token policy for primary ChatVLSC api.thevlsc.com/user_role/v1 clients and RLI Assistant at mcp.thevlsc.com/v1.",
+    "Load approved Cloudflare Access service-token credentials into local environment variables, then run pnpm run test:connectivity -- -UseCloudflareAccessServiceToken and pnpm run test:mcp:production.",
+    "Use config/tunnel-client-chatvlsc-mcp.profile.example.yaml as the tunnel-client profile template for mcp.thevlsc.com.",
+    "Authenticate Wrangler or provide a scoped Cloudflare deploy token outside source, then run pnpm run deploy and recheck live Worker markers.",
     "Use a Cloudflare token with Workers secret edit and Secrets Store write permission, then run scripts/import-chatvlsc-cloudflare-secrets.ps1.",
-    "Provide a clean Microsoft Graph token or app credential with Application.ReadWrite.All before running scripts/apply-entra-user-role-mcp.ps1.",
-    "Configure SSO/OIDC/SAML/SCIM only after owner approval and Graph permissions are available."
+    "Provide a clean Microsoft Graph token or app credential with Application.ReadWrite.All before running scripts/apply-entra-user-role-mcp.ps1 against approved existing app object 9c392dd7-7e0b-49a8-be0e-1269358f6f59.",
+    "Configure SSO/OIDC/SAML/SCIM only after Graph permissions are available."
   ]
 }

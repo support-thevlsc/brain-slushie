@@ -1,10 +1,10 @@
 {
   "$schema": "https://thevlsc.com/schemas/secure-connectivity-gate.config.schema.json",
   "name": "ChatVLSC Secure Connectivity Gate",
-  "status": "script_ready_validate_without_secrets",
-  "checked_at": "2026-07-07T10:30:00-05:00",
+  "status": "passed_without_secrets_authenticated_probe_ready",
+  "checked_at": "2026-07-10T10:13:38.8675844-05:00",
   "risk_level": 6,
-  "script": "Cloudfare.config/scripts/test-secure-connectivity.ps1",
+  "script": "scripts/test-secure-connectivity.ps1",
   "scope": {
     "local_mcp_clients": [
       "C:\\Users\\chris\\.warp\\.mcp.json",
@@ -33,14 +33,24 @@
     "accepted_zapier_results": [
       "auth_required",
       "zapier_auth_required_or_rejected"
-    ]
+    ],
+    "authenticated_service_token_mode": {
+      "enabled_by": "scripts/test-secure-connectivity.ps1 -UseCloudflareAccessServiceToken",
+      "header_sources": {
+        "CF-Access-Client-Id": "env:CF_ACCESS_CLIENT_ID",
+        "CF-Access-Client-Secret": "env:CF_ACCESS_CLIENT_SECRET"
+      },
+      "stores_header_values": false,
+      "expected_chatvlsc_result": "authenticated_success"
+    }
   },
   "pass_conditions": [
-    "Workspace MCP config includes ChatVLSC alpha and Zapier entries without credentials.",
-    "WARP MCP config includes ChatVLSC current and Zapier entries without credentials.",
+    "Workspace MCP config includes chatvlsc.thevlsc.mcp, primary ChatVLSC user_role, RLI Assistant, legacy chatvlsc_dev alias, and Zapier entries without credentials.",
+    "WARP MCP config includes chatvlsc.thevlsc.mcp, primary ChatVLSC current, RLI Assistant, and Zapier entries without credentials.",
     "Cloudflare WARP is connected and network healthy.",
     "cloudflared, CloudflareWARP, and CloudflareWARPUpdater services are running.",
-    "Current and alpha ChatVLSC MCP endpoints reject unauthenticated probes through Cloudflare Access or equivalent auth.",
+    "Primary current ChatVLSC and RLI Assistant MCP endpoints reject unauthenticated probes through Cloudflare Access or equivalent auth.",
+    "When -UseCloudflareAccessServiceToken is supplied, primary current ChatVLSC and RLI Assistant MCP endpoints accept approved service-token headers.",
     "Zapier MCP endpoint is reachable but rejects unauthenticated probes until OAuth is completed."
   ],
   "secret_handling": [
@@ -49,9 +59,41 @@
     "Keep cloudflared tunnel tokens only in Cloudflare/cloudflared service configuration."
   ],
   "next_steps": [
-    "Run the local Cloudfare.config connectivity gate before each MCP route or auth configuration change.",
-    "After a Cloudflare Access service token is created and stored in an approved secret store, add a separate ignored authenticated probe.",
+    "Run pnpm run test:connectivity before each MCP route or auth configuration change.",
+    "After a Cloudflare Access service token is created and stored in an approved secret store, run pnpm run test:connectivity -- -UseCloudflareAccessServiceToken.",
     "Retest production JSON-RPC initialize and tools/list only with approved Access credentials.",
     "Keep this sanitized gate mirrored to GitHub; keep authenticated probe output local only."
-  ]
+  ],
+  "last_result": {
+    "passed": 10,
+    "failed": 0,
+    "uses_secrets": false,
+    "stores_response_bodies": false,
+    "stores_redirect_urls": false,
+    "stores_header_values": false,
+    "workspace_servers": [
+      "chatvlsc.thevlsc.mcp",
+      "rli_assistant",
+      "chatvlsc_dev",
+      "user_role",
+      "Zapier"
+    ],
+    "warp_servers": [
+      "chatvlsc.thevlsc.mcp",
+      "rli_assistant",
+      "user_role",
+      "Zapier"
+    ],
+    "current_chatvlsc": "cloudflare_access_redirect",
+    "rli_assistant": "cloudflare_access_redirect",
+    "development_compatibility": "deprecated_alias_cloudflare_access_redirect",
+    "zapier": "auth_required",
+    "workspace_requires_chatvlsc_alias": true,
+    "workspace_requires_primary_user_role": true,
+    "workspace_requires_rli_assistant": true,
+    "workspace_requires_secondary_development_legacy_alias": true,
+    "warp_requires_rli_assistant": true,
+    "workspace_requires_zapier": true,
+    "warp_requires_chatvlsc_alias": true
+  }
 }

@@ -1,6 +1,10 @@
 {
   "service": "VLSC User Role MCP",
+  "mcp_server_name": "chatvlsc.thevlsc.mcp",
   "api_uri": "https://api.thevlsc.com/user_role/v1",
+  "rli_assistant_mcp_server_name": "rli_assistant",
+  "rli_assistant_url": "https://mcp.thevlsc.com/v1/",
+  "rli_assistant_renamed_from": "legacy_non_primary_chatvlsc_name",
   "mcp_dev_url": "https://mcp.thevlsc.com/v1/",
   "display_url": "https://mcp.thevlsc.com/user_role/auth",
   "chatvlsc_auth_url": "https://chatvlsc.thevlsc.com/auth/v1",
@@ -12,27 +16,47 @@
     "plan": "https://api.thevlsc.com/user_role/v1/files/sort/plan",
     "workflow": "https://api.thevlsc.com/user_role/v1/files/sort/workflow"
   },
+  "cloudflare_ai": {
+    "status": "https://api.thevlsc.com/user_role/v1/workers-ai/status",
+    "chat": "https://api.thevlsc.com/user_role/v1/workers-ai/chat",
+    "development_status": "https://mcp.thevlsc.com/v1/workers-ai/status",
+    "development_chat": "https://mcp.thevlsc.com/v1/workers-ai/chat",
+    "api": "workers_ai_run",
+    "account_id": "3213c2f6b79055d92921a6b81d1bedeb",
+    "default_model": "@cf/meta/llama-3.1-8b-instruct-fast",
+    "run_endpoint_template": "https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model_name}",
+    "token_env": "CLOUDFLARE_API_TOKEN"
+  },
   "mcp_config": {
     "configuration": "https://api.thevlsc.com/user_role/v1/mcp/config",
+    "rli_assistant_configuration": "https://mcp.thevlsc.com/v1/mcp/config",
     "development_configuration": "https://mcp.thevlsc.com/v1/mcp/config"
   },
   "security": {
     "route_map": "https://api.thevlsc.com/user_role/v1/security/route-map",
+    "rli_assistant_route_map": "https://mcp.thevlsc.com/v1/security/route-map",
     "development_route_map": "https://mcp.thevlsc.com/v1/security/route-map",
     "response_headers": "https://api.thevlsc.com/user_role/v1/security/headers",
+    "rli_assistant_response_headers": "https://mcp.thevlsc.com/v1/security/headers",
     "development_response_headers": "https://mcp.thevlsc.com/v1/security/headers",
     "local_config": "config/chatvlsc/secure-api-route-map.json"
   },
   "staged_configuration": {
     "status": "https://api.thevlsc.com/user_role/v1/configuration/staged",
+    "rli_assistant_status": "https://mcp.thevlsc.com/v1/configuration/staged",
     "development_status": "https://mcp.thevlsc.com/v1/configuration/staged",
     "local_config": "config/chatvlsc/staged-configuration-verification.config.json"
   },
   "chatgpt_app": {
+    "mcp_server_name": "chatvlsc.thevlsc.mcp",
     "readiness": "https://api.thevlsc.com/user_role/v1/chatgpt/app/readiness",
+    "rli_assistant_readiness": "https://mcp.thevlsc.com/v1/chatgpt/app/readiness",
     "development_readiness": "https://mcp.thevlsc.com/v1/chatgpt/app/readiness",
-    "mcp_server_url": "https://mcp.thevlsc.com/v1/",
-    "local_config": "config/chatvlsc/chatgpt-app-readiness.config.json"
+    "mcp_server_url": "https://api.thevlsc.com/user_role/v1/",
+    "local_config": "config/chatvlsc/chatgpt-app-readiness.config.json",
+    "rli_assistant_mcp_server_name": "rli_assistant",
+    "rli_assistant_mcp_server_url": "https://mcp.thevlsc.com/v1/",
+    "development_mcp_server_url": "https://mcp.thevlsc.com/v1/"
   },
   "ocr": {
     "status": "https://api.thevlsc.com/user_role/v1/ocr/status",
@@ -48,10 +72,14 @@
   "identity_policy": {
     "policy": "https://api.thevlsc.com/user_role/v1/identity/policy",
     "providers": "https://api.thevlsc.com/user_role/v1/identity/providers",
+    "rli_assistant_providers": "https://mcp.thevlsc.com/v1/identity/providers",
     "development_providers": "https://mcp.thevlsc.com/v1/identity/providers",
     "evaluate": "https://api.thevlsc.com/user_role/v1/identity/evaluate",
     "external_identity_providers_allowed": true,
-    "rule": "External identity providers are allowed when the external identity GUID matches the authorized member GUID."
+    "rule": "External identity providers are allowed when the external identity GUID matches the authorized member GUID.",
+    "reconciliation": "https://api.thevlsc.com/user_role/v1/identity/reconciliation",
+    "rli_assistant_reconciliation": "https://mcp.thevlsc.com/v1/identity/reconciliation",
+    "development_reconciliation": "https://mcp.thevlsc.com/v1/identity/reconciliation"
   },
   "consents": [
     {
@@ -64,5 +92,11 @@
       "description": "Allow the service to present role names, permission categories, and consent state for review before an agent relies on them.",
       "scope": "Read-only presentation of role and permission metadata"
     }
-  ]
+  ],
+  "primary_mcp_server": "https://api.thevlsc.com/user_role/v1",
+  "primary_mcp_server_name": "chatvlsc.thevlsc.mcp",
+  "secondary_mcp_server_name": "rli_assistant",
+  "secondary_mcp_server": "https://mcp.thevlsc.com/v1/",
+  "legacy_secondary_alias": "chatvlsc_dev",
+  "development_mcp_server": "https://mcp.thevlsc.com/v1/"
 }

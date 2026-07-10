@@ -1,7 +1,7 @@
 {
   "$schema": "https://thevlsc.com/schemas/dns-record-map.schema.json",
   "name": "ChatVLSC DNS Record Map",
-  "updated_at": "2026-07-05T21:39:03.1574398-05:00",
+  "updated_at": "2026-07-10T10:11:44.6465590-05:00",
   "zone": {
     "name": "thevlsc.com",
     "id": "4d161a72527e3f04ba46f7231b84f63b"
@@ -19,7 +19,8 @@
       "Cloudflare DNS comments are limited to 100 characters.",
       "Root AAAA placeholder is read-only and was not modified.",
       "Microsoft 365 MX and SPF records were updated with comments only.",
-      "www.thevlsc.com is a proxied CNAME routed to the dedicated homepage Worker."
+      "www.thevlsc.com is expected to be a proxied CNAME routed to the dedicated homepage Worker.",
+      "2026-07-10 10:11 CT local DNS check did not return an A, AAAA, or CNAME for www.thevlsc.com; verify Cloudflare DNS before homepage cutover."
     ]
   },
   "homepage_hosts": [
@@ -28,6 +29,7 @@
       "type": "CNAME",
       "content": "thevlsc.com",
       "proxied": true,
+      "observed_live_dns": "no_a_aaaa_or_cname_returned_by_local_resolver_on_2026-07-10T10:11:44-05:00",
       "comment": "Homepage CNAME to root; www Worker serves public UI."
     }
   ],

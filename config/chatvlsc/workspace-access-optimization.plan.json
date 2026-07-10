@@ -1,0 +1,223 @@
+{
+  "$schema": "https://thevlsc.com/schemas/workspace-access-optimization.plan.schema.json",
+  "name": "ChatVLSC least-workspace secure access optimization plan",
+  "reviewed_at": "2026-07-09T09:31:31.8064907-05:00",
+  "status": "planned_admin_gates_open",
+  "mcp_server_name": "chatvlsc.thevlsc.mcp",
+  "primary_mcp_server": "https://api.thevlsc.com/user_role/v1",
+  "secondary_mcp_server_name": "rli_assistant",
+  "secondary_mcp_server": "https://mcp.thevlsc.com/v1/",
+  "secondary_renamed_from": "legacy_non_primary_chatvlsc_name",
+  "legacy_secondary_alias": "chatvlsc_dev",
+  "objective": "Use available workspace connectors while joining users into the least number of workspaces and improving secure access to mcp.thevlsc.com for all approved IDP accounts.",
+  "minimum_workspace_model": {
+    "principle": "Keep humans in the fewest primary collaboration workspaces; connect service identities through scoped app/service credentials instead of extra user memberships.",
+    "human_workspace": {
+      "canonical_domain": "thevlsc.com",
+      "preferred_primary_identity": "christian@thevlsc.com",
+      "allowed_workspace_roles": [
+        "owner",
+        "admin",
+        "agent",
+        "viewer"
+      ],
+      "pending_identity_evidence": [
+        "Resolve chatvslc@thevlsc.com vs chatvlsc@thevlsc.com before granting agent access.",
+        "Resolve the redacted Google alias mismatch before alias linking.",
+        "Confirm whether christian.gid@thevlsc.com exists before any IDP routing."
+      ]
+    },
+    "service_identity_workspace": {
+      "purpose": "Machine access only. Do not invite service accounts as human users unless the target platform requires it.",
+      "service_principals": [
+        "Cloudflare Access service token for RLI Assistant at mcp.thevlsc.com/v1*",
+        "Microsoft Entra app registration for ChatVLSC roles and delegated scopes",
+        "OpenAI Platform project/app target after reauthentication",
+        "Zapier MCP connection for approved workflow automations"
+      ],
+      "secret_storage": [
+        "Cloudflare Worker secrets",
+        "Cloudflare Access service-token credentials",
+        "approved local ignored env files for development"
+      ]
+    },
+    "audit_workspace": {
+      "purpose": "Status and evidence only; no secrets.",
+      "systems": [
+        "Notion secure connectivity review page",
+        "Airtable ChatVLSC MCP Three-Stage Configuration Review base",
+        "Linear THE-5",
+        "sanitized public mirror under ChatVLSC (Codex)/repos/brain-slushie"
+      ],
+      "identity_reconciliation": [
+        "config/chatvlsc/idp-workspace-reconciliation.public.json",
+        "ChatVLSC (Codex)/repos/brain-slushie/config/chatvlsc/idp-workspace-reconciliation.public.json"
+      ]
+    }
+  },
+  "connector_access_matrix": [
+    {
+      "system": "Cloudflare",
+      "current_status": "read_available_live_worker_stale_vs_local",
+      "evidence": "Cloudflare Observability read vlsc-user-role-mcp id 91640dd38e074604bec987feeec1739d, but live code still lacks the current MCP JSON-RPC reconciliation surface, chatvlsc.thevlsc.mcp alias metadata, and current Workers AI route naming.",
+      "least_workspace_action": "Use one Cloudflare account/zone for thevlsc.com and one Access application/policy set for RLI Assistant at mcp.thevlsc.com/v1*.",
+      "next_gate": "Deploy current local Worker and create/select Access service-token credentials."
+    },
+    {
+      "system": "Microsoft Entra ID",
+      "current_status": "write_gated",
+      "evidence": "Local Graph config exists, but previous write attempts were blocked by app-registration permission.",
+      "least_workspace_action": "Use one Entra tenant as canonical IDP and link approved external aliases only after spelling/membership reconciliation.",
+      "next_gate": "Confirm target app object ID or approve creation of the ChatVLSC app registration."
+    },
+    {
+      "system": "OpenAI Platform",
+      "current_status": "reauth_required",
+      "evidence": "OpenAI Platform target listing returned UNAUTHORIZED / TRIGGER_REAUTHENTICATION on the 2026-07-09 09:31 CT recheck.",
+      "least_workspace_action": "Use one OpenAI organization/project for ChatVLSC; do not create keys from chat-pasted raw values.",
+      "next_gate": "Reauthenticate OpenAI Platform and select the org/project target through the secure connector flow."
+    },
+    {
+      "system": "Notion",
+      "current_status": "read_write_available",
+      "evidence": "Secure connectivity review page was found and updated with the 2026-07-09 checkpoint.",
+      "least_workspace_action": "Keep one Notion page as the audit/status control surface rather than creating new duplicate workspace pages.",
+      "next_gate": "Mark Stage 2 ready only after identity mismatches are resolved."
+    },
+    {
+      "system": "Airtable",
+      "current_status": "read_write_available",
+      "evidence": "Base apptIpzGISh4e46pJ contains staged governance tables and was updated with current gate evidence.",
+      "least_workspace_action": "Use the existing base as structured review inventory; do not create another Airtable base for the same workflow.",
+      "next_gate": "Keep Stage 2 in progress until IDP evidence is complete."
+    },
+    {
+      "system": "Linear",
+      "current_status": "read_write_available",
+      "evidence": "THE-5 was updated with the 2026-07-09 recent-change/access review comment.",
+      "least_workspace_action": "Keep implementation tracking in THE-5 until Notion/Airtable move the gate to execution-ready.",
+      "next_gate": "Create narrower Linear work only when a specific approved implementation task is unblocked."
+    },
+    {
+      "system": "Slack",
+      "current_status": "available_no_matching_channel",
+      "evidence": "Slack channel search for chatvlsc mcp thevlsc returned no results on the 2026-07-09 09:31 CT recheck.",
+      "least_workspace_action": "Do not create a new Slack workspace; use an existing channel only after the destination is identified.",
+      "next_gate": "Ask for or discover an existing channel if Slack updates are required."
+    },
+    {
+      "system": "Zapier MCP",
+      "current_status": "action_tools_not_exposed_in_current_tool_surface",
+      "evidence": "Current tool discovery exposes no Zapier MCP action tools. Referenced thread 019f3172-cc28-7731-82d5-b44503e946c0 records prior Entra/OneDrive/SharePoint/Notion/To Do action exposure, later blocked by credits/schema execution gates.",
+      "least_workspace_action": "Use one Zapier MCP connection for approved Entra/OneDrive/SharePoint/Notion automations; avoid duplicate connector workspaces.",
+      "next_gate": "Reconnect/reauthorize Zapier MCP action tools before attempting workflow execution."
+    },
+    {
+      "system": "Figma",
+      "current_status": "tool_available_no_file_or_plan_target",
+      "evidence": "Figma tools are exposed, but no file key or plan target is available for a design write.",
+      "least_workspace_action": "Use one shared Figma file or design system for ChatVLSC app and access-flow diagrams.",
+      "next_gate": "Provide or create a target Figma file before design-system writes."
+    },
+    {
+      "system": "tunnel-client",
+      "current_status": "available_no_recent_changes",
+      "evidence": "tunnel-client/cmd/client had no files modified in the last 48 hours. Existing client supports MCP server URL profiles and env/file-referenced headers.",
+      "least_workspace_action": "Use tunnel-client profiles for the same mcp.thevlsc.com target instead of separate local tunnel definitions per workspace.",
+      "next_gate": "Create a profile only after the Cloudflare Access service-token header source is approved."
+    }
+  ],
+  "mcp_connectivity_optimization": {
+    "target": "Primary ChatVLSC current api.thevlsc.com/user_role/v1; RLI Assistant mcp.thevlsc.com/v1 with legacy chatvlsc_dev alias",
+    "recommended_auth_layers": [
+      "Cloudflare Access application covering mcp.thevlsc.com/v1*",
+      "Service Auth policy for automation clients using CF-Access-Client-Id and CF-Access-Client-Secret headers",
+      "Worker-side identity/role claim checks for human and app-token flows",
+      "ChatGPT MCP OAuth protected-resource metadata before app submission",
+      "Repeatable local and authenticated production JSON-RPC probes"
+    ],
+    "current_local_status": [
+      "Local Wrangler dry-run passes.",
+      "Local config includes Workers AI /ai/run routing.",
+      "Recent review artifacts parse successfully.",
+      "Current ChatVLSC /user_role/v1 validates initialize, tools/list, get_service_status, get_workspace_access_reconciliation, evaluate_identity_claims, and plan_file_sort locally."
+    ],
+    "current_live_status": [
+      "Cloudflare Worker exists as vlsc-user-role-mcp.",
+      "Cloudflare Worker live code is stale versus local changes.",
+      "Workers Builds has no builds for the Worker.",
+      "Wrangler is not authenticated in this shell and no Cloudflare deploy/API token environment variable is present."
+    ],
+    "blocked_tests": [
+      "Authenticated production MCP JSON-RPC probe needs Cloudflare Access service-token credentials.",
+      "OpenAI ChatGPT app target/key work needs OpenAI Platform reauthentication.",
+      "Zapier action execution needs current Zapier MCP tool exposure.",
+      "IDP account grants need reconciliation of agent spelling, Google alias, and unverified domain GID identity."
+    ]
+  },
+  "access_changes_not_applied": [
+    "No users were invited or joined to any workspace.",
+    "No Slack channel was created.",
+    "No Cloudflare Access app, policy, or service token was created.",
+    "No Entra app registration, app role, OAuth scope, or claim setting was changed.",
+    "No OpenAI API key or ChatGPT app target was created.",
+    "No Zapier automation was executed.",
+    "No Figma file was modified."
+  ],
+  "approval_sequence": [
+    {
+      "step": 1,
+      "name": "Identity reconciliation",
+      "owner_surface": "Notion and Airtable",
+      "exit_criteria": "Canonical account list confirms chatvlsc, christian aliases, christian.gid, admin@thevlsc.com, and christian@thevlsc.com."
+    },
+    {
+      "step": 2,
+      "name": "Cloudflare service-auth setup",
+      "owner_surface": "Cloudflare Zero Trust",
+      "exit_criteria": "Access app/policy exists and service-token credentials are stored only outside source."
+    },
+    {
+      "step": 3,
+      "name": "Production deploy",
+      "owner_surface": "Cloudflare Workers",
+      "exit_criteria": "Wrangler deploy succeeds from an authenticated Cloudflare account or approved deploy token, and live Worker code contains /workers-ai/status plus the current MCP JSON-RPC reconciliation surface."
+    },
+    {
+      "step": 4,
+      "name": "Authenticated MCP probe",
+      "owner_surface": "Local test harness and tunnel-client profile",
+      "exit_criteria": "Authenticated initialize, tools/list, and sample tools/call pass against primary ChatVLSC api.thevlsc.com/user_role/v1 and RLI Assistant mcp.thevlsc.com/v1."
+    },
+    {
+      "step": 5,
+      "name": "Connector workspace enablement",
+      "owner_surface": "OpenAI Platform, Zapier, Slack, Figma",
+      "exit_criteria": "Only the required existing workspace/project/channel/file is enabled, with no duplicate workspaces created."
+    }
+  ],
+  "development_mcp_server": "https://mcp.thevlsc.com/v1/",
+  "implementation_surface_policy": "Primary implementation target is ChatVLSC current at api.thevlsc.com/user_role/v1. The mcp.thevlsc.com/v1 route is RLI Assistant, with chatvlsc_dev retained only as a legacy client alias.",
+  "current_connector_recheck": {
+    "checked_at": "2026-07-09T09:31:31.8064907-05:00",
+    "openai_platform": "reauth_required_UNAUTHORIZED_TRIGGER_REAUTHENTICATION",
+    "slack": "no_matching_channel_for_chatvlsc_mcp_thevlsc",
+    "cloudflare_worker": "vlsc-user-role-mcp id 91640dd38e074604bec987feeec1739d read_available",
+    "cloudflare_builds": "0 builds returned for vlsc-user-role-mcp",
+    "cloudflare_live_code": "stale_vs_local_missing_current_mcp_jsonrpc_reconciliation_surface_chatvlsc_alias_metadata_and_current_workers_ai_route_naming",
+    "figma": "tools_available_no_file_key_or_plan_target",
+    "zapier_mcp": "action_tools_not_exposed_in_current_session_but_thread_019f3172_records_prior_action_exposure_then_credit_gate"
+  },
+  "production_deploy_gate": {
+    "config": "config/chatvlsc/cloudflare-production-deploy.gate.json",
+    "status": "blocked_not_authenticated",
+    "dry_run": "passed",
+    "wrangler_whoami": "not_authenticated",
+    "live_worker_code": "stale_vs_local_missing_current_mcp_jsonrpc_reconciliation_surface_and_chatvlsc_alias_metadata"
+  },
+  "completion_audit": {
+    "config": "config/chatvlsc-goal-completion-audit.json",
+    "status": "incomplete_external_gates_open",
+    "achieved": false
+  }
+}

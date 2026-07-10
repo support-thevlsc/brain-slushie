@@ -1,8 +1,8 @@
 {
   "$schema": "https://thevlsc.com/schemas/mcp-protocol-validation.schema.json",
   "name": "ChatVLSC MCP Protocol Validation",
-  "status": "local_protocol_passed_production_auth_gated",
-  "checked_at": "2026-07-07T10:10:59-05:00",
+  "status": "local_current_chatvlsc_protocol_passed_production_auth_gated",
+  "checked_at": "2026-07-10T09:59:44.7359801-05:00",
   "risk_level": 5,
   "source_scope": {
     "worker_source": "C:\\Users\\chris\\Documents\\Cloudfare.config\\src\\index.js",
@@ -33,6 +33,11 @@
         "read_only": true
       },
       {
+        "name": "get_workspace_access_reconciliation",
+        "read_only": true,
+        "returns_redacted_identity_reconciliation": true
+      },
+      {
         "name": "evaluate_identity_claims",
         "read_only": true
       },
@@ -45,12 +50,26 @@
     "mutating_tools_enabled": false,
     "secret_values_returned": false,
     "validation_script": "scripts/test-chatvlsc-mcp-protocol.ps1",
-    "validation_command": "powershell -ExecutionPolicy Bypass -File scripts/test-chatvlsc-mcp-protocol.ps1 -BaseUrl http://127.0.0.1:8789"
+    "validation_command": "powershell -ExecutionPolicy Bypass -File scripts/test-chatvlsc-mcp-protocol.ps1 -BaseUrl http://127.0.0.1:8793",
+    "authenticated_production_validation": {
+      "status": "script_ready_not_run",
+      "command": "pnpm run test:mcp:production",
+      "current_base_url": "https://api.thevlsc.com",
+      "rli_assistant_base_url": "https://mcp.thevlsc.com",
+      "legacy_development_base_url": "https://mcp.thevlsc.com",
+      "header_sources": {
+        "CF-Access-Client-Id": "env:CF_ACCESS_CLIENT_ID",
+        "CF-Access-Client-Secret": "env:CF_ACCESS_CLIENT_SECRET"
+      },
+      "stores_header_values": false
+    },
+    "primary_validated_route": "ChatVLSC current /user_role/v1",
+    "secondary_compatibility_route": "RLI Assistant /v1 initialize only; legacy chatvlsc_dev alias retained"
   },
   "local_probe_results": [
     {
       "name": "current_initialize",
-      "url": "http://127.0.0.1:8787/user_role/v1",
+      "url": "http://127.0.0.1:8793/user_role/v1",
       "status": 200,
       "content_type": "application/json; charset=utf-8",
       "has_jsonrpc": true,
@@ -58,8 +77,8 @@
       "marker": "chatvlsc-user-role-mcp"
     },
     {
-      "name": "alpha_initialize",
-      "url": "http://127.0.0.1:8787/v1/",
+      "name": "rli_assistant_initialize",
+      "url": "http://127.0.0.1:8793/v1/",
       "status": 200,
       "content_type": "application/json; charset=utf-8",
       "has_jsonrpc": true,
@@ -68,16 +87,16 @@
     },
     {
       "name": "tools_list",
-      "url": "http://127.0.0.1:8787/v1/",
+      "url": "http://127.0.0.1:8793/user_role/v1",
       "status": 200,
       "content_type": "application/json; charset=utf-8",
       "has_jsonrpc": true,
       "has_result": true,
-      "marker": "tools=4"
+      "marker": "tools=5;annotations=True"
     },
     {
-      "name": "service_tool",
-      "url": "http://127.0.0.1:8787/v1/",
+      "name": "get_service_status",
+      "url": "http://127.0.0.1:8793/user_role/v1",
       "status": 200,
       "content_type": "application/json; charset=utf-8",
       "has_jsonrpc": true,
@@ -85,8 +104,17 @@
       "marker": "mcp_protocol_ready_auth_gated"
     },
     {
-      "name": "identity_tool",
-      "url": "http://127.0.0.1:8787/user_role/v1",
+      "name": "get_workspace_access_reconciliation",
+      "url": "http://127.0.0.1:8793/user_role/v1",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "has_jsonrpc": true,
+      "has_result": true,
+      "marker": "reconciliation_required_no_access_changes_applied"
+    },
+    {
+      "name": "evaluate_identity_claims",
+      "url": "http://127.0.0.1:8793/user_role/v1",
       "status": 200,
       "content_type": "application/json; charset=utf-8",
       "has_jsonrpc": true,
@@ -95,7 +123,7 @@
     },
     {
       "name": "plan_file_sort",
-      "url": "http://127.0.0.1:8789/v1/",
+      "url": "http://127.0.0.1:8793/user_role/v1",
       "status": 200,
       "content_type": "application/json; charset=utf-8",
       "has_jsonrpc": true,
@@ -105,26 +133,33 @@
   ],
   "local_harness_summary": {
     "ok": true,
-    "base_url": "http://127.0.0.1:8789",
-    "passed": 6,
+    "base_url": "http://127.0.0.1:8793",
+    "checked_at": "2026-07-10T09:59:44.7359801-05:00",
+    "passed": 7,
     "failed": 0,
     "checks": [
       "current_initialize",
-      "alpha_initialize",
+      "rli_assistant_initialize",
       "tools_list",
       "get_service_status",
+      "get_workspace_access_reconciliation",
       "evaluate_identity_claims",
       "plan_file_sort"
-    ]
+    ],
+    "primary_tool_call_path": "/user_role/v1",
+    "secondary_compatibility_path": "/v1/",
+    "secondary_mcp_server_name": "rli_assistant",
+    "legacy_secondary_alias": "chatvlsc_dev"
   },
   "production_probe_status": {
     "current_endpoint": "cloudflare_access_required",
-    "alpha_endpoint": "cloudflare_access_required",
-    "reason": "Unauthenticated production probes return Cloudflare Access redirects. Protocol should be retested after deploy with an approved identity or service token."
+    "rli_assistant_endpoint": "cloudflare_access_required",
+    "legacy_development_endpoint": "cloudflare_access_required_secondary_alias",
+    "reason": "Unauthenticated production probes return Cloudflare Access redirects. Protocol should be retested after deploy with an approved identity or service token; tool-call validation is targeted at primary ChatVLSC /user_role/v1, with RLI Assistant retained as the secondary MCP surface."
   },
   "next_steps": [
     "Deploy the Worker source change after Cloudflare authentication is available.",
-    "Retest https://api.thevlsc.com/user_role/v1 and https://mcp.thevlsc.com/v1/ with an approved Cloudflare Access identity or service token.",
+    "Retest https://api.thevlsc.com/user_role/v1 and RLI Assistant at https://mcp.thevlsc.com/v1/ with an approved Cloudflare Access identity or service token.",
     "Keep mutating MCP tools disabled until Entra, Graph, and Cloudflare secret-store permissions are in place."
   ]
 }

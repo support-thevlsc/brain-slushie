@@ -1,0 +1,377 @@
+{
+  "$schema": "https://thevlsc.com/schemas/recent-change-access-review.schema.json",
+  "name": "ChatVLSC MCP recent change and access review",
+  "reviewed_at": "2026-07-10T09:57:22.6908107-05:00",
+  "review_window": {
+    "from": "2026-07-09T21:57:22.6908107-05:00",
+    "to": "2026-07-10T09:57:22.6908107-05:00"
+  },
+  "status": "in_progress_production_deploy_auth_gated",
+  "scope": {
+    "mcp_server_name": "chatvlsc.thevlsc.mcp",
+    "primary_mcp_host": "api.thevlsc.com",
+    "worker": "vlsc-user-role-mcp",
+    "account_id": "3213c2f6b79055d92921a6b81d1bedeb",
+    "public_mirror": "config/chatvlsc/recent-change-access-review.json"
+  },
+  "recent_local_changes": [
+    {
+      "date": "2026-07-09",
+      "area": "Production deploy gate validator",
+      "summary": "Added a validate-only deploy gate command that checks required Wrangler routes, package scripts, local Worker source markers, secret environment variable presence as booleans, and Wrangler auth state without attempting a deploy or storing raw auth output.",
+      "files": [
+        "README.md",
+        "config/chatvlsc/cloudflare-production-deploy.gate.json"
+      ],
+      "validation": [
+        "pnpm run test:deploy-gate returned ok=true, deploy_ready=false, status=blocked_not_authenticated, passed=5, failed=0",
+        "Deploy gate validator stores_secret_values=false and stores_wrangler_whoami_output=false",
+        "No deploy was attempted"
+      ],
+      "live_execution": "validate_only_no_deploy_no_secret_values_read"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Secret-source hardening and Access-plan validation",
+      "summary": "Removed local archive and token-entry filename assumptions from Cloudflare Access and Worker secret import flows. Added validate-only access-plan script coverage and made remote Cloudflare checks prefer env:CLOUDFLARE_API_TOKEN.",
+      "files": [
+        "README.md",
+        "config/chatvlsc/cloudflare-access-mcp.plan.json",
+        "config/chatvlsc/cloudflare-secret-storage.plan.json",
+        "config/chatvlsc/staged-configuration-verification.config.json",
+        "config/chatvlsc/secure-api-route-map.json"
+      ],
+      "validation": [
+        "pnpm run test:access-plan passed in validate-only mode with no token supplied",
+        "Secret importer validate-only mode returns not_checked_token_env_missing and stores_secret_values=false when env:CLOUDFLARE_API_TOKEN is absent",
+        "Strict public secret-source scan no longer finds local archive names or token-entry filenames"
+      ],
+      "live_execution": "validate_only_no_remote_writes_no_secret_values_read"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Cloudflare agent setup and primary ChatVLSC target cleanup",
+      "summary": "Fetched the official Cloudflare agent setup prompt, confirmed Codex global Cloudflare MCP registrations, recorded the Cloudflare MCP server set in ChatVLSC config, and removed stale non-primary ChatVLSC target wording from the active public docs/mirror surfaces.",
+      "files": [
+        "config/chatvlsc/cloudflare-mcp.config.json",
+        "config/chatvlsc/mcp-connection-flow-map.md",
+        "README.md"
+      ],
+      "validation": [
+        "Fetched https://developers.cloudflare.com/agent-setup/prompt.md",
+        "Codex config contains cloudflare, cloudflare-docs, cloudflare-bindings, cloudflare-builds, and cloudflare-observability MCP servers",
+        "codex mcp list could not run because Windows returned Access is denied",
+        "Stale non-primary target wording scan over docs and public mirror returned no matches after cleanup"
+      ],
+      "live_execution": "config_and_docs_only_no_secrets_or_access_changes_applied"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Active goal completion audit",
+      "summary": "Added a requirement-by-requirement audit showing which parts of the full ChatVLSC connector/access objective are proved, partial, or still externally gated.",
+      "files": [
+        "config/chatvlsc/chatvlsc-goal-completion-audit.public.json"
+      ],
+      "validation": [
+        "Audit records goal_completion.achieved=false",
+        "Audit maps Notion, Linear, Airtable, Slack, OpenAI Platform, Cloudflare, cloudflared, tunnel-client, Zapier, Figma, least-workspace, and IDP requirements to evidence and remaining gates",
+        "Public mirror audit is sanitized"
+      ],
+      "live_execution": "audit_only_no_access_changes_applied"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Primary MCP alias registration",
+      "summary": "Configured the requested MCP name chatvlsc.thevlsc.mcp as a primary alias for ChatVLSC current, pointing to api.thevlsc.com/user_role/v1 while keeping mcp.thevlsc.com/v1 as secondary development compatibility only.",
+      "files": [
+        ".mcp.json",
+        "C:/Users/chris/.warp/.mcp.json",
+        "src/index.js",
+        "config/chatvlsc/chatgpt-app-readiness.config.json",
+        "config/chatvlsc/mcp-endpoints.json",
+        "config/chatvlsc/mcp-connection-readiness.json",
+        "config/chatvlsc/secure-connectivity-gate.config.json"
+      ],
+      "validation": [
+        "Bundled-runtime node --check src/index.js passed",
+        "pnpm run check passed with Wrangler dry-run",
+        "pnpm run test:connectivity passed 10 checks / 0 failed",
+        "Workspace MCP config reports servers=chatvlsc.thevlsc.mcp,chatvlsc_dev,user_role,Zapier",
+        "WARP MCP config reports servers=chatvlsc.thevlsc.mcp,user_role,Zapier",
+        "JSON parse passed for 47 files",
+        "Secret scan passed",
+        "Public personal-alias scan passed"
+      ],
+      "live_execution": "local_config_validated_no_credentials_added_production_deploy_still_auth_gated"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Cloudflare production deploy gate",
+      "summary": "Recorded the live deployment gate: local dry-run passes, Wrangler is not authenticated, no Cloudflare deploy/API token environment variables are present, and the live Worker bundle is stale versus local.",
+      "files": [
+        "config/chatvlsc/cloudflare-production-deploy.gate.json",
+        "config/chatvlsc/cloudflare-mcp.config.json"
+      ],
+      "validation": [
+        "pnpm run check passed with Wrangler dry-run",
+        "pnpm exec wrangler whoami reported not authenticated",
+        "CLOUDFLARE_API_TOKEN and CF_API_TOKEN were not present in process environment",
+        "Cloudflare Observability read vlsc-user-role-mcp but live code is stale versus local"
+      ],
+      "live_execution": "production_deploy_not_run_wrangler_not_authenticated"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Workspace MCP registration",
+      "summary": "Registered primary ChatVLSC user_role MCP in the workspace .mcp.json and updated the connectivity gate to require it alongside the secondary development route and Zapier.",
+      "files": [
+        ".mcp.json",
+        "scripts/test-secure-connectivity.ps1",
+        "config/mcp-connection-readiness.json",
+        "config/secure-connectivity-gate.config.json"
+      ],
+      "validation": [
+        "PowerShell parser check passed for scripts/test-secure-connectivity.ps1",
+        "JSON parse passed for .mcp.json and config mirrors",
+        "pnpm run test:connectivity passed 10 checks / 0 failed",
+        "Workspace MCP config now reports servers=chatvlsc.thevlsc.mcp,chatvlsc_dev,user_role,Zapier",
+        "Secret scan passed"
+      ],
+      "live_execution": "local_config_validated_no_credentials_added"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Primary ChatVLSC MCP reconciliation surface",
+      "summary": "Added a sanitized identity/workspace reconciliation endpoint and MCP tool to the primary ChatVLSC current route, with mcp.thevlsc.com/v1 retained only as secondary development compatibility.",
+      "files": [
+        "src/index.js",
+        "scripts/test-chatvlsc-mcp-protocol.ps1",
+        "config/mcp-protocol-validation.json",
+        "config/chatgpt-app-readiness.config.json",
+        "config/mcp-endpoints.json"
+      ],
+      "validation": [
+        "Local MCP protocol harness validates tools/list and get_workspace_access_reconciliation through /user_role/v1",
+        "New tool returns reconciliation_required_no_access_changes_applied and public redaction marker",
+        "No users, IDP aliases, access apps, policies, service tokens, OpenAI keys, Zapier workflows, Slack channels, or Figma files were changed"
+      ],
+      "live_execution": "local_current_chatvlsc_validated_production_deploy_still_auth_gated"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "IDP workspace reconciliation",
+      "summary": "Added a public machine-readable matrix for least-workspace human membership, service identity handling, provider gates, and unresolved IDP account mismatches with alternate personal identifiers redacted.",
+      "files": [
+        "config/chatvlsc/idp-workspace-reconciliation.public.json",
+        "config/chatvlsc/workspace-access-optimization.plan.json"
+      ],
+      "validation": [
+        "Matrix JSON parses successfully",
+        "Public mirror matrix redacts alternate personal identifiers",
+        "Matrix records no access changes applied"
+      ],
+      "live_execution": "not_applied_reconciliation_required"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Authenticated MCP probe and tunnel-client readiness",
+      "summary": "Extended the secure connectivity and MCP protocol harnesses with explicit Cloudflare Access service-token header support, and added a sanitized tunnel-client profile example for mcp.thevlsc.com.",
+      "files": [
+        "scripts/test-secure-connectivity.ps1",
+        "scripts/test-chatvlsc-mcp-protocol.ps1",
+        "config/chatvlsc/tunnel-client-chatvlsc-mcp.profile.example.yaml",
+        "package.json",
+        "README.md",
+        "config/chatvlsc/secure-connectivity-gate.config.json",
+        "config/chatvlsc/mcp-protocol-validation.json"
+      ],
+      "validation": [
+        "PowerShell parser checks passed for both probe scripts",
+        "pnpm run test:connectivity passed 10 checks / 0 failed without secrets",
+        "pnpm run check passed with Wrangler dry-run",
+        "changed JSON config files parsed successfully",
+        "static profile check confirmed env:CF_ACCESS_CLIENT_ID and env:CF_ACCESS_CLIENT_SECRET references only"
+      ],
+      "live_execution": "authenticated_production_probe_not_run_waiting_for_cloudflare_access_service_token_env"
+    },
+    {
+      "date": "2026-07-09",
+      "area": "Cloudflare Workers AI",
+      "summary": "Configured the Worker to use the Cloudflare Workers AI run endpoint and added /workers-ai/status plus /workers-ai/chat aliases.",
+      "files": [
+        "src/index.js",
+        "scripts/invoke-chatvlsc-workers-ai.ps1",
+        ".dev.vars.example",
+        "wrangler.jsonc",
+        "package.json",
+        "README.md",
+        "config/cloudflare-mcp.config.json",
+        "config/mcp-endpoints.json"
+      ],
+      "validation": [
+        "node --check src/index.js passed",
+        "PowerShell parser check for scripts/invoke-chatvlsc-workers-ai.ps1 passed",
+        "pnpm run check passed with bundled Node path",
+        "changed JSON config files parsed successfully"
+      ],
+      "live_execution": "not_run_no_cloudflare_api_token_present"
+    },
+    {
+      "date": "2026-07-08",
+      "area": "Entra and identity review",
+      "summary": "Added or updated identity review status, admin approval packet, and readiness evidence. Identity mismatches remain unresolved.",
+      "files": [
+        "config/entra-chatvlsc-write-status.json",
+        "config/mcp-connection-readiness.json",
+        "docs/entra-user-role-mcp-admin-approval-packet.md"
+      ],
+      "validation": [
+        "Airtable identity mapping confirms redacted_agent_spelling_variant vs requested chatvlsc@thevlsc.com mismatch",
+        "Airtable identity mapping confirms redacted_google_alias_candidate vs redacted_google_alias_observed mismatch",
+        "Airtable identity mapping reports redacted_domain_gid_identity not found"
+      ],
+      "live_execution": "not_applied_identity_admin_gate_open"
+    },
+    {
+      "date": "2026-07-07",
+      "area": "MCP connectivity and Cloudflare Access planning",
+      "summary": "Published secure connectivity gate, protocol harness, service-auth plan, and end-to-end MCP connection flow map.",
+      "files": [
+        "scripts/test-secure-connectivity.ps1",
+        "scripts/test-chatvlsc-mcp-protocol.ps1",
+        "config/secure-connectivity-gate.config.json",
+        "config/cloudflare-access-mcp.plan.json",
+        "config/mcp-protocol-validation.json",
+        "docs/mcp-connection-flow-map.md"
+      ],
+      "validation": [
+        "previous local pnpm run test:connectivity recorded 10 passed / 0 failed",
+        "previous local MCP JSON-RPC harness recorded initialize, tools/list, and sample tools/call coverage"
+      ],
+      "live_execution": "production_auth_and_access_service_token_gate_open"
+    }
+  ],
+  "connector_evidence": {
+    "notion": {
+      "status": "read_write_available",
+      "evidence": "ChatVLSC secure connectivity gate review page was updated with latest hardening checkpoint comment 399eac9b-82e9-81b3-a374-001d1a9be6b7."
+    },
+    "linear": {
+      "status": "read_write_available",
+      "evidence": "THE-5 comments record the secure MCP, Cloudflare Access, Zapier, Entra, OpenAI, production deploy, and chatvlsc.thevlsc.mcp alias gates through latest hardening comment dc86e9a3-76c9-4628-90ea-1fab32ede394."
+    },
+    "airtable": {
+      "status": "read_write_available",
+      "evidence": "The existing Airtable review record was updated with latest hardening checkpoint comment comBTilc5yqPF6aX7."
+    },
+    "slack": {
+      "status": "available_but_no_matching_channel_found",
+      "evidence": "Slack channel search for chatvlsc thevlsc mcp returned no results on the 2026-07-10 02:04 CT recheck."
+    },
+    "openai_platform": {
+      "status": "reauth_required",
+      "evidence": "OpenAI Platform target listing returned UNAUTHORIZED / TRIGGER_REAUTHENTICATION on the 2026-07-10 02:04 CT recheck."
+    },
+    "cloudflare": {
+      "status": "read_available_live_worker_stale_vs_local",
+      "evidence": "Cloudflare read vlsc-user-role-mcp id 91640dd38e074604bec987feeec1739d, but live code still lacks current local MCP JSON-RPC/reconciliation changes and the chatvlsc.thevlsc.mcp metadata alias."
+    },
+    "cloudflare_builds": {
+      "status": "available_no_builds",
+      "evidence": "Workers Builds returned 0 builds for vlsc-user-role-mcp on the 2026-07-09 09:31 CT recheck."
+    },
+    "zapier": {
+      "status": "action_tools_not_exposed_in_current_tool_surface",
+      "evidence": "Current tool discovery exposes no Zapier MCP action tools. Referenced thread 019f3172-cc28-7731-82d5-b44503e946c0 records that Zapier previously exposed Entra/OneDrive/SharePoint/Notion/To Do actions, then schema/execution became credit-gated."
+    },
+    "figma": {
+      "status": "tool_available_no_file_or_plan_target",
+      "evidence": "Figma tools are exposed, but no file key or plan target was available for this review."
+    }
+  },
+  "referenced_thread_evidence": [
+    {
+      "thread_id": "019f3172-cc28-7731-82d5-b44503e946c0",
+      "title": "Add Zapier MCP server",
+      "status": "read_current_summary",
+      "evidence": [
+        "Zapier MCP server URL https://mcp.zapier.com/api/v1/connect was added to WARP/workspace MCP configuration.",
+        "Earlier in that thread, Zapier action tools were able to read Microsoft Graph application data through Entra raw request actions.",
+        "Later in that thread, Zapier schema probing/execution and Notion update attempts were blocked by workspace credits.",
+        "A raw OpenAI key appeared in that thread; it must not be repeated or reused from chat and should be rotated or handled only through the secure OpenAI Platform connector."
+      ]
+    }
+  ],
+  "workspace_access_strategy": {
+    "target": "Use the fewest workspaces possible while preserving auditability and least privilege.",
+    "recommended_consolidation": [
+      "Keep ChatVLSC MCP operational evidence in the existing Notion review page, Airtable review base, Linear THE-5, and public sanitized GitHub mirror.",
+      "Do not create additional workspaces for the same users until the canonical domain identities and external aliases are resolved.",
+      "Separate human workspace membership from machine/service identities such as ChatVLSC agent users, Cloudflare Access service tokens, Zapier MCP connections, and OpenAI API keys.",
+      "Treat api.thevlsc.com/user_role/v1 as the primary ChatVLSC implementation target and mcp.thevlsc.com/v1 as secondary development compatibility."
+    ],
+    "not_applied": [
+      "No users were invited or joined to any workspace.",
+      "No Cloudflare Access policies, Entra app roles, Slack channels, Airtable records, Notion pages, or OpenAI keys were created in this pass."
+    ]
+  },
+  "secure_access_gates": [
+    {
+      "gate": "Cloudflare Access service auth",
+      "status": "open",
+      "required_evidence": "Access applications covering api.thevlsc.com/user_role/v1*, mcp.thevlsc.com/v1*, and api.thevlsc.com/admin/v1* plus Service Auth policies and service-token credentials stored outside source."
+    },
+    {
+      "gate": "IDP identity reconciliation",
+      "status": "open",
+      "required_evidence": "Canonical resolution for chatvlsc@thevlsc.com, redacted_google_alias_candidate or redacted_google_alias_observed, and redacted_domain_gid_identity."
+    },
+    {
+      "gate": "OpenAI Platform",
+      "status": "reauth_required",
+      "required_evidence": "Reauthenticated OpenAI Platform connector and selected organization/project target before key or ChatGPT app work continues."
+    },
+    {
+      "gate": "Production deployment",
+      "status": "open",
+      "required_evidence": "wrangler deploy succeeds or Cloudflare build/deploy evidence shows local post-2026-07-07 changes live on vlsc-user-role-mcp; current shell is not authenticated and config/chatvlsc/cloudflare-production-deploy.gate.json records the gate."
+    },
+    {
+      "gate": "Zapier MCP",
+      "status": "open",
+      "required_evidence": "Zapier MCP authorization and action schema availability in the current session."
+    }
+  ],
+  "secret_handling": {
+    "local_secret_files_checked": [
+      {
+        "path": ".dev.vars",
+        "exists": false,
+        "openai_api_key_present": false,
+        "cloudflare_api_token_present": false
+      },
+      {
+        "path": ".env.local",
+        "exists": false,
+        "openai_api_key_present": false,
+        "cloudflare_api_token_present": false
+      },
+      {
+        "path": ".env",
+        "exists": false,
+        "openai_api_key_present": false,
+        "cloudflare_api_token_present": false
+      }
+    ],
+    "policy": "Do not repeat, commit, publish, or move raw tokens from chat or thread history. Any previously pasted key should be rotated or handled through the secure connector flow."
+  },
+  "next_actions": [
+    "Resolve identity spelling and membership mismatches in Notion/Airtable before granting access.",
+    "Reauthenticate OpenAI Platform connector before any OpenAI key/app target work.",
+    "Create or select Cloudflare Access service-token credentials and store them outside source before authenticated MCP production tests.",
+    "Run pnpm run test:connectivity -- -UseCloudflareAccessServiceToken and pnpm run test:mcp:production after approved service-token credentials are loaded; the protocol harness now exercises primary ChatVLSC /user_role/v1 for tool calls.",
+    "Use config/chatvlsc/tunnel-client-chatvlsc-mcp.profile.example.yaml as the sanitized tunnel-client profile starting point for mcp.thevlsc.com.",
+    "Authenticate Wrangler or provide a scoped Cloudflare deploy token outside source, then deploy or trigger a Cloudflare build for vlsc-user-role-mcp.",
+    "Update Linear THE-5 with this review result and keep Airtable Stage 2 as In Progress until IDP evidence is complete."
+  ]
+}

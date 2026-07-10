@@ -1,0 +1,254 @@
+{
+  "$schema": "https://thevlsc.com/schemas/idp-workspace-reconciliation.matrix.schema.json",
+  "name": "ChatVLSC IDP and workspace reconciliation matrix",
+  "checked_at": "2026-07-09T09:31:31.8064907-05:00",
+  "status": "reconciliation_required_no_access_changes_applied",
+  "mcp_server_name": "chatvlsc.thevlsc.mcp",
+  "primary_mcp_server": "https://api.thevlsc.com/user_role/v1",
+  "live_recheck": {
+    "checked_at": "2026-07-09T09:31:31.8064907-05:00",
+    "openai_platform": "reauth_required_UNAUTHORIZED_TRIGGER_REAUTHENTICATION",
+    "slack": "no_matching_channel_for_chatvlsc_mcp_thevlsc",
+    "cloudflare_worker": "vlsc-user-role-mcp id 91640dd38e074604bec987feeec1739d read_available",
+    "cloudflare_builds": "0 builds returned for vlsc-user-role-mcp",
+    "cloudflare_live_code": "stale_vs_local_missing_current_mcp_jsonrpc_reconciliation_surface_chatvlsc_alias_metadata_and_current_workers_ai_route_naming",
+    "figma": "tools_available_no_file_key_or_plan_target",
+    "zapier_mcp": "action_tools_not_exposed_in_current_session_but_thread_019f3172_records_prior_action_exposure_then_credit_gate"
+  },
+  "least_workspace_rule": "Keep humans in one canonical thevlsc.com workspace wherever possible. Use service principals, service tokens, and connector credentials for machine access instead of adding service accounts as human workspace members.",
+  "source_refs": [
+    "config/identity-provider-claims.config.json",
+    "config/christian-identity-access.config.json",
+    "config/entra-user-role-mcp.graph.json",
+    "config/entra-chatvlsc-write-status.json",
+    "config/chatvlsc/cloudflare-access-mcp.plan.json",
+    "config/workspace-access-optimization.plan.json",
+    "config/chatvlsc/mcp-connection-readiness.json"
+  ],
+  "canonical_workspace_model": {
+    "human_workspace": {
+      "domain": "thevlsc.com",
+      "primary_identity": "christian@thevlsc.com",
+      "roles_to_confirm": [
+        "owner",
+        "admin",
+        "viewer"
+      ],
+      "do_not_create_duplicate_workspace": true
+    },
+    "machine_workspace": {
+      "principle": "Machine identities must use scoped credentials and must not be invited as normal users unless a target platform explicitly requires it.",
+      "service_identities": [
+        "Cloudflare Access service token for mcp.thevlsc.com/v1*",
+        "Microsoft Entra application ChatVLSC / client 520e42c6-398f-4521-aa62-b3b95092637d",
+        "OpenAI Platform project or app target after reauthentication",
+        "Zapier MCP connection after current action tools are exposed",
+        "tunnel-client profile using env-referenced Access headers"
+      ]
+    },
+    "audit_workspace": {
+      "systems": [
+        "existing Notion review page",
+        "existing Airtable ChatVLSC MCP review base",
+        "Linear THE-5",
+        "sanitized public mirror"
+      ],
+      "secret_values_allowed": false
+    }
+  },
+  "human_identity_reconciliation": [
+    {
+      "subject": "primary_owner",
+      "requested_or_primary_account": "christian@thevlsc.com",
+      "observed_accounts": [
+        "christian@thevlsc.com"
+      ],
+      "provider_scope": [
+        "entra_id",
+        "cloudflare",
+        "openai_platform",
+        "notion",
+        "airtable",
+        "linear"
+      ],
+      "desired_workspace_role": "owner",
+      "status": "canonical_identity_ready_for_admin_verification",
+      "required_evidence": "Platform-native membership or owner/admin role evidence in the canonical thevlsc.com workspace."
+    },
+    {
+      "subject": "chatvlsc_agent_identity",
+      "requested_or_primary_account": "chatvlsc@thevlsc.com",
+      "observed_accounts": [
+        "chatvslc@thevlsc.com"
+      ],
+      "provider_scope": [
+        "entra_id",
+        "cloudflare_access",
+        "worker_metadata"
+      ],
+      "desired_workspace_role": "agent_or_service_principal",
+      "status": "blocked_spelling_mismatch",
+      "required_evidence": "Confirm whether chatvlsc@thevlsc.com or chatvslc@thevlsc.com is the canonical agent identity before any grant."
+    },
+    {
+      "subject": "google_alias",
+      "requested_or_primary_account": "redacted_google_alias_candidate",
+      "observed_accounts": [
+        "redacted_google_alias_observed"
+      ],
+      "provider_scope": [
+        "google_id",
+        "cloudflare_access_google_idp"
+      ],
+      "desired_workspace_role": "linked_alias_only",
+      "status": "blocked_alias_mismatch",
+      "required_evidence": "Confirm the correct Google account and stable provider subject/GUID before linking it to christian@thevlsc.com."
+    },
+    {
+      "subject": "gid_domain_identity",
+      "requested_or_primary_account": "christian.gid@thevlsc.com",
+      "observed_accounts": [],
+      "provider_scope": [
+        "entra_id",
+        "cloudflare_access"
+      ],
+      "desired_workspace_role": "none_until_found",
+      "status": "blocked_not_found",
+      "required_evidence": "Directory lookup proving the account exists, or written decision to remove it from the access plan."
+    },
+    {
+      "subject": "admin_domain_identity",
+      "requested_or_primary_account": "admin@thevlsc.com",
+      "observed_accounts": [
+        "admin@thevlsc.com"
+      ],
+      "provider_scope": [
+        "entra_id"
+      ],
+      "desired_workspace_role": "admin",
+      "status": "verification_required",
+      "required_evidence": "Confirm mailbox/user existence and intended admin role before granting app or Access admin privileges."
+    },
+    {
+      "subject": "apple_icloud_alias",
+      "requested_or_primary_account": "redacted_icloud_alias",
+      "observed_accounts": [
+        "redacted_icloud_alias"
+      ],
+      "provider_scope": [
+        "apple_id",
+        "icloud_email",
+        "microsoft_id"
+      ],
+      "desired_workspace_role": "linked_alias_only",
+      "status": "claim_mapping_required",
+      "required_evidence": "Stable provider subject/GUID mapped to the canonical owner identity."
+    },
+    {
+      "subject": "microsoft_personal_alias",
+      "requested_or_primary_account": "redacted_outlook_alias",
+      "observed_accounts": [
+        "redacted_outlook_alias"
+      ],
+      "provider_scope": [
+        "microsoft_id",
+        "outlook_email"
+      ],
+      "desired_workspace_role": "linked_alias_only",
+      "status": "claim_mapping_required",
+      "required_evidence": "Stable Microsoft personal account subject mapped to the canonical owner identity."
+    },
+    {
+      "subject": "cloud_mail_admin",
+      "requested_or_primary_account": "thevlsc_com@cloudmailadmin.com",
+      "observed_accounts": [
+        "thevlsc_com@cloudmailadmin.com"
+      ],
+      "provider_scope": [
+        "cloud_mail_admin"
+      ],
+      "desired_workspace_role": "mail_admin_only",
+      "status": "claim_mapping_required",
+      "required_evidence": "Confirm this account is mail administration only and does not need ChatVLSC MCP workspace membership."
+    }
+  ],
+  "provider_gates": [
+    {
+      "provider": "Cloudflare Access",
+      "status": "policy_and_service_token_not_created_live_worker_stale",
+      "least_workspace_action": "Use one Access application/policy set for mcp.thevlsc.com/v1* and service-token credentials for automation clients.",
+      "required_evidence": "Access application, Service Auth policy, service token ID, and authenticated MCP probe passing without storing headers."
+    },
+    {
+      "provider": "Microsoft Entra ID",
+      "status": "write_gated_403_authorization_request_denied",
+      "least_workspace_action": "Patch the existing ChatVLSC app registration only; do not create a duplicate app registration unless separately approved.",
+      "required_evidence": "Application.ReadWrite.All or Application Administrator / Cloud Application Administrator rights, then successful safe executor run."
+    },
+    {
+      "provider": "OpenAI Platform",
+      "status": "reauth_required",
+      "least_workspace_action": "Use one OpenAI organization/project target selected through the secure connector flow.",
+      "required_evidence": "OpenAI Platform target listing succeeds and the selected org/project is recorded without exposing keys."
+    },
+    {
+      "provider": "Zapier MCP",
+      "status": "action_tools_not_exposed",
+      "least_workspace_action": "Use one Zapier MCP connection for approved automations after authorization and action schema exposure.",
+      "required_evidence": "Current-session Zapier MCP tools are exposed and a non-mutating readiness call succeeds."
+    },
+    {
+      "provider": "Slack",
+      "status": "no_matching_channel_found",
+      "least_workspace_action": "Use an existing workspace/channel when identified; do not create a duplicate Slack workspace.",
+      "required_evidence": "Target channel ID or explicit approval to create a new channel in an existing workspace."
+    },
+    {
+      "provider": "Figma",
+      "status": "tool_available_no_file_or_plan_target",
+      "least_workspace_action": "Use one shared Figma file or design-system target if a design deliverable is needed.",
+      "required_evidence": "Figma file key and approved edit scope."
+    }
+  ],
+  "mcp_connectivity_checks": {
+    "unauthenticated_gate": {
+      "command": "pnpm run test:connectivity",
+      "expected_result": "Cloudflare Access redirect for ChatVLSC endpoints and auth-required for Zapier without storing bodies or redirects."
+    },
+    "authenticated_gate": {
+      "commands": [
+        "pnpm run test:connectivity -- -UseCloudflareAccessServiceToken",
+        "pnpm run test:mcp:production"
+      ],
+      "requires_env": [
+        "CF_ACCESS_CLIENT_ID",
+        "CF_ACCESS_CLIENT_SECRET"
+      ],
+      "stores_header_values": false
+    },
+    "tunnel_client_profile": {
+      "example": "config/chatvlsc/tunnel-client-chatvlsc-mcp.profile.example.yaml",
+      "target": "https://mcp.thevlsc.com/v1/",
+      "uses_env_secret_references": true
+    }
+  },
+  "access_changes_not_applied": [
+    "No users were invited or joined to any workspace.",
+    "No identity aliases were linked.",
+    "No Cloudflare Access application, policy, or service token was created.",
+    "No Entra app registration or app role was changed.",
+    "No OpenAI key, project, or ChatGPT app target was created.",
+    "No Zapier, Slack, or Figma write was performed."
+  ],
+  "next_actions": [
+    "Resolve the chatvlsc/chatvslc spelling mismatch before agent access.",
+    "Resolve the redacted Google alias mismatch before Cloudflare Google IDP linking.",
+    "Confirm whether christian.gid@thevlsc.com exists or remove it from the access plan.",
+    "Create or select a Cloudflare Access service token, store credentials outside source, then run the authenticated MCP probes.",
+    "Reauthenticate OpenAI Platform before API key or ChatGPT app target work.",
+    "Expose or reconnect Zapier MCP action tools before workflow execution."
+  ],
+  "rli_assistant_mcp_server": "https://mcp.thevlsc.com/v1/",
+  "legacy_development_mcp_server": "https://mcp.thevlsc.com/v1/",
+  "chatvlsc_surface_policy": "Implement and validate on primary ChatVLSC current first. Treat mcp.thevlsc.com/v1 as RLI Assistant, with chatvlsc_dev retained only as a legacy client alias."
+}

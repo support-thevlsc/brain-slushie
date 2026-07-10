@@ -1,7 +1,7 @@
 {
   "$schema": "https://thevlsc.com/schemas/entra-chatvlsc-write-status.schema.json",
   "name": "ChatVLSC Entra App Registration Write Status",
-  "checked_at": "2026-07-05T20:49:20-05:00",
+  "checked_at": "2026-07-08T09:29:32-05:00",
   "application": {
     "object_id": "9c392dd7-7e0b-49a8-be0e-1269358f6f59",
     "client_id": "520e42c6-398f-4521-aa62-b3b95092637d",
@@ -12,6 +12,14 @@
     "method": "Microsoft Graph PATCH /applications/{id}",
     "transport": "Zapier Microsoft Entra ID raw mutating request",
     "intent": "Preserve existing app registration collections while adding ChatVLSC description, homepage, redirect URIs, app roles, extra delegated consent scopes, and tags."
+  },
+  "owner_approval": {
+    "decision": "approved_patch_existing_app",
+    "approved_at": "2026-07-08T09:29:32-05:00",
+    "target_object_id": "9c392dd7-7e0b-49a8-be0e-1269358f6f59",
+    "create_if_missing": false,
+    "upload_logo_by_default": false,
+    "note": "Approval is for patching the existing ChatVLSC app registration only. Do not create a new app registration unless separately approved."
   },
   "result": {
     "applied": false,
@@ -37,16 +45,18 @@
     ]
   },
   "current_session_recheck": {
-    "checked_at": "2026-07-06T00:00:00-05:00",
+    "checked_at": "2026-07-08T09:29:32-05:00",
     "graph_access_token_present": false,
     "zapier_entra_tools_exposed": false,
-    "computer_use_fallback": "available_but_not_used_for_mutating_entra_settings",
-    "computer_use_note": "UI-based Entra app-registration permission changes require action-time confirmation before submit because they modify cloud access and identity permissions.",
-    "safe_status": "No Entra mutation was attempted in this session."
+    "az_cli_present": false,
+    "microsoft_graph_powershell_present": false,
+    "available_connector_write_path": false,
+    "safe_status": "Owner approved patching the existing app, but no Entra mutation was attempted because no clean Microsoft Graph credential or app-registration write connector is available in this session."
   },
   "required_next_step": {
     "permission": "Application.ReadWrite.All or equivalent Application Administrator / Cloud Application Administrator rights for the connected Microsoft Entra identity",
     "safe_executor": "scripts/apply-entra-user-role-mcp.ps1",
+    "safe_mode": "The script now merges identifierUris, redirectUris, optionalClaims, appRoles, and OAuth scopes by default instead of replacing existing collections.",
     "logo_note": "App logo upload still requires Microsoft Graph binary PUT /applications/{id}/logo using public/assets/chatvlsc-logo-512.png."
   }
 }

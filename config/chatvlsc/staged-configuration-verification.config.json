@@ -21,14 +21,14 @@
         "Nested brain-slushie checkout is synced with origin/main.",
         "GitHub connector resolves the repository as The-VLSC/brain-slushie with admin, push, pull, maintain, and triage permissions.",
         "Wrangler dry-run passes.",
-        "Wrangler is not logged in interactively, but an active Cloudflare token from Keys.zip authenticates account lookup only.",
+        "Wrangler is not logged in interactively; prior local token checks authenticated account lookup only.",
         "Current Cloudflare token candidates are denied for Worker secret and Secrets Store APIs.",
         "No Cloudflare, Graph, OpenAI, or GitHub token was persisted to local environment variables, .dev.vars, GitHub, or Notion.",
-        "Keys.zip contains 11 distinct OpenAI API key files; owner selection and rotation review are required before mapping one to OPENAI_API_KEY.",
+        "OpenAI key selection must happen through the secure OpenAI Platform connector before mapping one to OPENAI_API_KEY.",
         "OpenAI Platform API-key target discovery is exposed but rejected by the connected account.",
         "Cloudflare One Client is installed, running, connected, and network healthy.",
         "Cloudflared service is installed and running; tunnel token remains service-config only.",
-        "ChatVLSC Token.txt is mixed login and token handoff text, not a clean Microsoft Graph access token."
+        "Mixed login and token handoff text is not a clean Microsoft Graph access token."
       ]
     },
     {
@@ -74,20 +74,21 @@
     }
   ],
   "current_gates": {
-    "cloudflare_deploy": "Wrangler can authenticate account lookup from Keys.zip, but the active token is denied for Worker secret and Secrets Store APIs.",
+    "cloudflare_deploy": "Prior local Cloudflare token checks authenticated account lookup only; current deploy remains gated on a scoped token or Wrangler login.",
     "cloudflare_account_wide_changes": "Cloudflare plugin namespace is not exposed in this session; current local API token lacks secret-store permissions.",
     "entra_app_registration_write": "Microsoft Graph write requires Application.ReadWrite.All or Application Administrator / Cloud Application Administrator rights.",
-    "microsoft_graph_token": "No clean Microsoft Graph access token was found in Keys.zip; ChatVLSC Token.txt is excluded from Graph automation.",
+    "microsoft_graph_token": "No clean Microsoft Graph access token is available for Graph automation.",
     "openai_chatgpt_app_creation": "OpenAI Platform connector target discovery was rejected by the connected account.",
     "cloudflare_one_client": "Cloudflare One Client is connected and healthy; no VPN or security settings were changed.",
     "cloudflared_service": "Cloudflared service is running; tunnel token stays in service configuration and is not copied into Worker secrets.",
     "zapier_entra_execution": "Zapier/Entra tools are not exposed in this session."
   },
   "safe_public_endpoints": {
-    "staged_configuration": "https://mcp.thevlsc.com/v1/configuration/staged",
-    "chatgpt_app_readiness": "https://mcp.thevlsc.com/v1/chatgpt/app/readiness",
-    "identity_providers": "https://mcp.thevlsc.com/v1/identity/providers",
-    "security_headers": "https://mcp.thevlsc.com/v1/security/headers",
-    "security_route_map": "https://mcp.thevlsc.com/v1/security/route-map"
+    "staged_configuration": "https://api.thevlsc.com/user_role/v1/configuration/staged",
+    "chatgpt_app_readiness": "https://api.thevlsc.com/user_role/v1/chatgpt/app/readiness",
+    "identity_providers": "https://api.thevlsc.com/user_role/v1/identity/providers",
+    "security_headers": "https://api.thevlsc.com/user_role/v1/security/headers",
+    "security_route_map": "https://api.thevlsc.com/user_role/v1/security/route-map",
+    "secondary_development_compatibility": "https://mcp.thevlsc.com/v1/"
   }
 }

@@ -1,7 +1,7 @@
 {
   "$schema": "https://thevlsc.com/schemas/cloudflare-mcp.config.schema.json",
   "name": "ChatVLSC Cloudflare MCP Configuration",
-  "status": "mcp_protocol_ready_secret_store_authz_blocked",
+  "status": "mcp_protocol_ready_production_deploy_auth_gated",
   "service": "VLSC User Role MCP",
   "worker": {
     "name": "vlsc-user-role-mcp",
@@ -15,15 +15,21 @@
   },
   "mcp": {
     "transport": "https",
+    "server_name": "chatvlsc.thevlsc.mcp",
     "api_uri": "https://api.thevlsc.com/user_role/v1",
+    "rli_assistant_server_name": "rli_assistant",
+    "rli_assistant_url": "https://mcp.thevlsc.com/v1/",
+    "rli_assistant_renamed_from": "legacy_non_primary_chatvlsc_name",
     "development_mcp_url": "https://mcp.thevlsc.com/v1/",
     "display_url": "https://mcp.thevlsc.com/user_role/auth",
     "chatvlsc_auth_url": "https://chatvlsc.thevlsc.com/auth/v1",
     "plannedEndpoints": {
       "mcpJsonRpc": "POST /",
-      "developmentMcpJsonRpc": "POST /v1/",
+      "rliAssistantJsonRpc": "POST /v1/",
+      "developmentMcpJsonRpc": "POST /v1/ (legacy alias for RLI Assistant)",
       "configuration": "GET /mcp/config",
-      "developmentConfiguration": "GET /v1/mcp/config",
+      "rliAssistantConfiguration": "GET /v1/mcp/config",
+      "developmentConfiguration": "GET /v1/mcp/config (legacy alias for RLI Assistant)",
       "securityRouteMap": "GET /security/route-map",
       "securityHeaders": "GET /security/headers",
       "identityProviders": "GET /identity/providers",
@@ -31,8 +37,11 @@
       "ocrStatus": "GET /ocr/status",
       "ocrSchema": "GET /ocr/schema",
       "fileSortStatus": "GET /files/sort/status",
+      "workersAiStatus": "GET /workers-ai/status",
+      "workersAiChat": "POST /workers-ai/chat",
       "stagedConfiguration": "GET /configuration/staged",
-      "chatgptAppReadiness": "GET /chatgpt/app/readiness"
+      "chatgptAppReadiness": "GET /chatgpt/app/readiness",
+      "identityReconciliation": "GET /identity/reconciliation"
     },
     "protocol": {
       "transport": "streamable_http_jsonrpc",
@@ -46,12 +55,19 @@
       "tools": [
         "get_service_status",
         "get_identity_policy",
+        "get_workspace_access_reconciliation",
         "evaluate_identity_claims",
         "plan_file_sort"
       ],
       "mutating_tools_enabled": false,
-      "local_validation": "passed_2026-07-07"
-    }
+      "local_validation": "passed_2026-07-09_current_chatvlsc",
+      "tool_count": 5
+    },
+    "primary_implementation_route": "https://api.thevlsc.com/user_role/v1",
+    "secondary_route": "https://mcp.thevlsc.com/v1/",
+    "secondary_route_name": "RLI Assistant",
+    "legacy_secondary_alias": "chatvlsc_dev",
+    "secondary_development_route": "https://mcp.thevlsc.com/v1/"
   },
   "repository": {
     "repository_full_name": "The-VLSC/brain-slushie",
@@ -73,16 +89,56 @@
     ]
   },
   "currentSession": {
-    "wranglerAuth": "zip_cloudflare_token_authenticates_account_lookup_only",
-    "cloudflareApiToken": "active_token_candidates_present_in_keys_zip_but_denied_for_worker_secrets_and_secrets_store",
-    "cloudflarePlugin": "not_exposed_in_current_session",
+    "wranglerAuth": "not_authenticated_wrangler_whoami_requires_login",
+    "cloudflareApiToken": "not_present_in_process_environment",
+    "cloudflarePlugin": "observability_read_available_deploy_write_not_available",
     "cloudflareOneClient": "installed_running_connected_network_healthy",
     "cloudflaredService": "installed_running_tunnel_token_remains_service_config_only",
     "wranglerVersion": "4.107.0",
     "secretsStore": "wrangler_secrets_store_available_open_beta_but_current_token_lacks_permission",
     "workerSecrets": "current_token_lacks_worker_secret_list_write_permission",
     "lastDryRun": "passed",
-    "localMcpProtocol": "passed_initialize_tools_list_and_sample_tools_call_on_user_role_v1_and_v1_paths"
+    "localMcpProtocol": "passed_current_chatvlsc_user_role_v1_initialize_tools_list_and_sample_tools_call_with_rli_assistant_v1_initialize"
+  },
+  "productionDeployGate": {
+    "config": "config/chatvlsc/cloudflare-production-deploy.gate.json",
+    "status": "blocked_not_authenticated",
+    "dryRun": "passed",
+    "wranglerWhoami": "not_authenticated",
+    "liveWorkerCode": "stale_vs_local_missing_current_mcp_jsonrpc_reconciliation_surface_and_chatvlsc_alias_metadata",
+    "deployAttempted": false,
+    "requiredNextGate": "Run wrangler login or provide a scoped Cloudflare deploy token outside source, then run pnpm run deploy."
+  },
+  "cloudflareAi": {
+    "api": "workers_ai_run",
+    "restEndpointTemplate": "https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model_name}",
+    "accountId": "3213c2f6b79055d92921a6b81d1bedeb",
+    "defaultModel": "@cf/meta/llama-3.1-8b-instruct-fast",
+    "runtimeSecret": "CLOUDFLARE_API_TOKEN",
+    "localHelper": "scripts/invoke-chatvlsc-workers-ai.ps1",
+    "workerRoutes": [
+      "GET /workers-ai/status",
+      "POST /workers-ai/chat"
+    ],
+    "legacyRouteAliases": [
+      "GET /ai-gateway/status",
+      "POST /ai-gateway/chat"
+    ],
+    "secretValuePolicy": "Do not commit or publish CLOUDFLARE_API_TOKEN; store it only in approved local env or Cloudflare Worker secrets."
+  },
+  "cloudflareAgentSetup": {
+    "sourceUrl": "https://developers.cloudflare.com/agent-setup/prompt.md",
+    "fetchedAt": "2026-07-09",
+    "codexMcpServers": [
+      "https://mcp.cloudflare.com/mcp",
+      "https://docs.mcp.cloudflare.com/mcp",
+      "https://bindings.mcp.cloudflare.com/mcp",
+      "https://builds.mcp.cloudflare.com/mcp",
+      "https://observability.mcp.cloudflare.com/mcp"
+    ],
+    "workspaceTarget": "chatvlsc.thevlsc.mcp",
+    "implementationSurface": "primary_chatvlsc_current_api_thevlsc_user_role_v1_with_rli_assistant_secondary_mcp_thevlsc_v1",
+    "secretValuePolicy": "OAuth and bearer tokens must stay in approved local or provider secret stores and must not be committed."
   },
   "legacyRepositoryPolicy": "Do not include or reintroduce legacy repository references.",
   "secretStorePlan": {
@@ -94,7 +150,7 @@
   },
   "secretsPolicy": {
     "cloudflareApiToken": "Worker secret only when token has Worker secret write permission; never commit or publish",
-    "openaiApiKey": "Keys.zip contains multiple distinct OpenAI keys; choose and rotate before mapping one to OPENAI_API_KEY",
+    "openaiApiKey": "Use only a key selected through the secure OpenAI Platform connector before mapping one to OPENAI_API_KEY",
     "microsoftGraph": "No clean Graph access token was found; do not use mixed ChatVLSC Token handoff text for Graph writes",
     "cloudflaredTunnelToken": "Cloudflared service config only; not a Worker runtime secret",
     "notion": "No secrets in Notion",

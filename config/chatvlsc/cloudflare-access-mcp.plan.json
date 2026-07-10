@@ -2,7 +2,7 @@
   "$schema": "https://thevlsc.com/schemas/cloudflare-access-mcp.plan.schema.json",
   "name": "ChatVLSC Cloudflare Access MCP Plan",
   "status": "planned_validate_only_current_token_permissions_unverified",
-  "checked_at": "2026-07-07T10:18:00-05:00",
+  "checked_at": "2026-07-10T02:14:00-05:00",
   "risk_level": 7,
   "cloudflare": {
     "account_id": "3213c2f6b79055d92921a6b81d1bedeb",
@@ -49,12 +49,12 @@
       "status": "planned"
     },
     {
-      "name": "ChatVLSC Alpha MCP Service Auth",
+      "name": "RLI Assistant MCP Service Auth",
       "type": "self_hosted",
       "domain": "mcp.thevlsc.com/v1*",
-      "purpose": "Protect the alpha/development ChatVLSC MCP JSON-RPC endpoint for machine clients.",
+      "purpose": "Protect the RLI Assistant MCP JSON-RPC endpoint for machine clients.",
       "policy": {
-        "name": "ChatVLSC Alpha MCP Service Token",
+        "name": "RLI Assistant MCP Service Token",
         "decision": "service_auth",
         "include": "approved Cloudflare Access service token only",
         "service_auth_401_redirect": true
@@ -77,13 +77,15 @@
   ],
   "identity_provider_plan": {
     "interactive_sso": "Use Entra ID / Azure AD as the owner/admin identity provider after Graph permissions are available.",
-    "oauth_oidc": "Keep OAuth/OIDC callback metadata in config/chatvlsc/entra-user-role-mcp.graph.json and apply through Microsoft Graph only with Application.ReadWrite.All or equivalent role.",
+    "oauth_oidc": "Keep OAuth/OIDC callback metadata in config/entra-user-role-mcp.graph.json and apply through Microsoft Graph only with Application.ReadWrite.All or equivalent role.",
     "saml": "Do not configure SAML for ChatVLSC MCP unless a specific SaaS client requires SAML; prefer OIDC for Entra-backed app registration.",
     "scim": "SCIM remains documentation/planning only until Entra and Cloudflare Access identity-provider administration permissions are available."
   },
   "safe_executor": {
     "script": "scripts/apply-cloudflare-access-mcp.ps1",
     "default_mode": "validate_only",
+    "validate_command": "pnpm run test:access-plan",
+    "remote_token_source_policy": "Remote Cloudflare reads and writes prefer env:CLOUDFLARE_API_TOKEN. Zip-token input is explicit-only via -KeysZip and -CloudflareTokenEntry and must never be committed, printed, or mirrored.",
     "mutation_requires": [
       "-Apply",
       "-ServiceTokenId <existing Cloudflare Access service token id>",
@@ -92,8 +94,8 @@
     "secret_output_policy": "Never prints Cloudflare token, service token client secret, or API response secrets."
   },
   "next_steps": [
-    "Run scripts/apply-cloudflare-access-mcp.ps1 in validate-only mode to verify the plan shape.",
-    "Use a Cloudflare token with Access apps/policies and service-token permissions to check remote Access state.",
+    "Run pnpm run test:access-plan in validate-only mode to verify the plan shape without token reads or remote writes.",
+    "Use env:CLOUDFLARE_API_TOKEN with Access apps/policies and service-token permissions to check remote Access state.",
     "Create or select the Cloudflare Access service token in Cloudflare Zero Trust and store its credentials only in an approved secret store.",
     "Apply the Access applications and Service Auth policies with -Apply after owner approval.",
     "Retest production MCP JSON-RPC endpoints with CF-Access-Client-Id and CF-Access-Client-Secret headers."

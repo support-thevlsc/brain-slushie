@@ -1,0 +1,29 @@
+# Example tunnel-client profile for the ChatVLSC MCP server.
+# This file is safe to keep in source because it uses env: references only.
+# Required secret values must stay in an approved local environment or secret store.
+config_version: 1
+control_plane:
+  base_url: env:CONTROL_PLANE_BASE_URL
+  url_path: env:CONTROL_PLANE_URL_PATH
+  tunnel_id: env:CONTROL_PLANE_TUNNEL_ID
+  api_key: env:CONTROL_PLANE_API_KEY
+health:
+  listen_addr: "127.0.0.1:0"
+  url_file: env:TUNNEL_CLIENT_HEALTH_URL_FILE
+admin_ui:
+  open_browser: false
+log:
+  level: info
+  format: json
+mcp:
+  server_urls:
+    - channel: chatvlsc
+      url: "https://mcp.thevlsc.com/v1/"
+  extra_headers:
+    CF-Access-Client-Id: env:CF_ACCESS_CLIENT_ID
+    CF-Access-Client-Secret: env:CF_ACCESS_CLIENT_SECRET
+  discovery_extra_headers:
+    CF-Access-Client-Id: env:CF_ACCESS_CLIENT_ID
+    CF-Access-Client-Secret: env:CF_ACCESS_CLIENT_SECRET
+  connection_max_ttl: 10m
+  max_concurrent_requests: 6
