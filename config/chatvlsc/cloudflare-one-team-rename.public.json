@@ -1,0 +1,29 @@
+{
+  "$schema": "https://thevlsc.com/schemas/cloudflare-one-team-rename.public.schema.json",
+  "name": "Cloudflare One Team Rename Plan",
+  "status": "display_name_applied_auth_domain_unchanged",
+  "risk_level": 8,
+  "current_team_domain": "fragrant-king-d899.cloudflareaccess.com",
+  "desired_team_name": "chatvlsc",
+  "applied_team_name": "chatvlsc",
+  "auth_domain_status": "unchanged_due_to_dashboard_sso_constraint",
+  "preflight": [
+    "Confirm the desired team name is available.",
+    "Inventory MDM and device-local organization overrides.",
+    "Reconcile enrollment and Access principals before the rename.",
+    "Record Access audiences and device profiles for rollback.",
+    "Test one non-critical device before broad migration.",
+    "Update Worker team-domain configuration only after Cloudflare confirms the rename."
+  ],
+  "current_enrollment": {
+    "requested_support_principal_present": true,
+    "requested_owner_and_agent_admin_principals_pending": false
+  },
+  "applied_access_controls": {
+    "warp_authentication": true,
+    "binding_cookie": true,
+    "mfa_required_for_operational_principals": true,
+    "raw_secrets_exposed": false
+  },
+  "apply_requires": "Only the underlying auth-domain rename remains blocked by Cloudflare Dashboard SSO ownership."
+}

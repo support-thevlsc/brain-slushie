@@ -1,0 +1,28 @@
+{
+  "$schema": "https://thevlsc.com/schemas/rli-agent-dev1.workspace-agent.plan.schema.json",
+  "name": "RLI Agent (dev.1)",
+  "status": "draft_created_api_channel_staged_group_target_unresolved",
+  "risk_level": 6,
+  "parent": "ChatVLSC (alpha)",
+  "purpose": "Limited branch agent for portable RLI workflow analysis, testing, and promotion proposals.",
+  "proposed_agent": {
+    "auth_mode": "PERSONAL",
+    "enabled_actions": "ALL_WITH_END_USER_APPROVAL",
+    "write_action_approval_required_from": "END_USER",
+    "publish": false
+  },
+  "attached_apps": ["ChatVLSC (alpha)", "Notion", "GitHub", "SharePoint", "OpenAI Platform"],
+  "skills": {
+    "approved_sources": ["reviewed workspace-agent skills", "curated Codex skills", "tunnel-mcp skill"],
+    "runtime_installation": false,
+    "activation_rule": "Activate only a reviewed skill whose scope matches the verified request and environment."
+  },
+  "guardrails": [
+    "RLI Agent remains a ChatVLSC alpha branch agent.",
+    "Fediland, Fe-Di, RLI, and NPL boundaries remain intact.",
+    "All changes start in read-only validation mode.",
+    "Promotion requires owner approval."
+  ],
+  "publication_gate": "Resolve the exact ChatGPT workspace group identifier intended by Fediland Groups before publishing the existing draft.",
+  "runtime_group_gate": "Set FEDILAND_GROUP_ID only after the stable identity-provider group identifier is reviewed. A display name match does not grant RLI access."
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://thevlsc.com/schemas/identity-virtual-environments.public.schema.json",
+  "name": "ChatVLSC Identity Virtual Environments",
+  "status": "cloudflare_access_live_entra_role_bindings_pending",
+  "risk_level": 8,
+  "authorization_boundary": {
+    "authority_scores_are_authorization": false,
+    "verified_cloudflare_access_jwt_required": true,
+    "entra_role_or_group_claim_required": true,
+    "fresh_mfa_window_seconds": 900,
+    "raw_secret_delivery_allowed": false,
+    "capability_evaluator_grants_execution": false
+  },
+  "profiles": [
+    {
+      "id": "domain_owner",
+      "authority_metadata": 10,
+      "environment": "ChatVLSC stable",
+      "secret_use": "server_side_capability_only_after_fresh_mfa"
+    },
+    {
+      "id": "agent_admin",
+      "authority_metadata": 9,
+      "environment": "ChatVLSC alpha",
+      "higher_authority_changes": "prohibited_without_owner_signoff"
+    },
+    {
+      "id": "support_agent",
+      "authority_metadata": 6,
+      "environment": "ChatVLSC adaptive support",
+      "runtime_skill_installation": false
+    },
+    {
+      "id": "rli_dev",
+      "authority_metadata": 5,
+      "environment": "Fediland portable validation branch",
+      "promotion": "proposal_only"
+    },
+    {
+      "id": "viewer_review",
+      "authority_metadata": 1,
+      "environment": "Authenticated review"
+    }
+  ],
+  "app_variants": ["ChatVLSC (1.0.0)", "ChatVLSC (alpha)", "RLI Agent (dev.1)"],
+  "not_applied": [
+    "Cloudflare auth-domain rename",
+    "Entra role assignments",
+    "Apple identity federation",
+    "OpenAI key creation",
+    "Workspace-agent publication"
+  ],
+  "private_mapping_policy": "Principal addresses, aliases, and external identity mappings remain in local and reviewed identity systems, not this public mirror."
+}

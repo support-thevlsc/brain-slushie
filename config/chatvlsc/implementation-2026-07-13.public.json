@@ -1,0 +1,37 @@
+{
+  "$schema": "https://thevlsc.com/schemas/chatvlsc-implementation-audit.public.schema.json",
+  "name": "ChatVLSC Implementation Audit",
+  "implemented_at": "2026-07-13T01:22:43-05:00",
+  "status": "cloudflare_and_worker_applied_external_identity_bindings_pending",
+  "cloudflare": {
+    "zero_trust_display_name": "chatvlsc",
+    "auth_domain_status": "preserved_due_to_dashboard_sso_constraint",
+    "owner_access_preserved": true,
+    "operational_principals_mfa_gated": true,
+    "warp_authentication": true,
+    "binding_cookie": true
+  },
+  "worker": {
+    "name": "vlsc-user-role-mcp",
+    "traffic_percentage": 100,
+    "bindings_preserved": ["D1", "Workflow", "Workers AI", "Assets", "Secrets Store"],
+    "secret_values_read": false
+  },
+  "workspace_agent": {
+    "name": "RLI Agent (dev.1)",
+    "status": "draft_created_api_channel_staged",
+    "auth_mode": "personal_end_user_connections",
+    "published": false,
+    "publication_gate": "Stable Fediland workspace group identifier is unresolved."
+  },
+  "external_gates": {
+    "entra": "Application roles and assignments were not changed because the available connector failed before Graph execution.",
+    "openai": "No new key was created or exposed."
+  },
+  "verification": {
+    "wrangler_dry_run": "passed",
+    "identity_tests": "14_of_14_passed",
+    "access_edge_enforcement": "verified",
+    "credentials_or_secrets_exposed": false
+  }
+}
