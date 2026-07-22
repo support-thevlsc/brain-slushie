@@ -5,26 +5,44 @@
   "compatibility_date": "2026-07-22",
   "workers_dev": false,
   "observability": { "enabled": true },
+  "limits": { "cpu_ms": 50 },
+  "ai": { "binding": "AI" },
   "vars": {
     "ENVIRONMENT": "development",
     "OWNER_PRINCIPAL": "Christian@TheVLSC.com",
-    "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com"
+    "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com",
+    "HOMUNCUL_PRINCIPAL": "Homoncul.ai@TheVLSC.com",
+    "CHATVLSC_PRINCIPAL": "Chat@TheVLSC.com",
+    "RISK_REVIEW_THRESHOLD": "8"
   },
   "env": {
     "staging": {
       "name": "thevlsc-kagent-staging",
+      "workers_dev": true,
+      "ai": { "binding": "AI" },
       "vars": {
         "ENVIRONMENT": "staging",
         "OWNER_PRINCIPAL": "Christian@TheVLSC.com",
-        "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com"
+        "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com",
+        "HOMUNCUL_PRINCIPAL": "Homoncul.ai@TheVLSC.com",
+        "CHATVLSC_PRINCIPAL": "Chat@TheVLSC.com",
+        "RISK_REVIEW_THRESHOLD": "8"
       }
     },
     "production": {
-      "name": "thevlsc-kagent",
+      "name": "mono-aireality-configurator",
+      "workers_dev": false,
+      "routes": [
+        { "pattern": "mono.aireality.com", "custom_domain": true }
+      ],
+      "ai": { "binding": "AI" },
       "vars": {
         "ENVIRONMENT": "production",
         "OWNER_PRINCIPAL": "Christian@TheVLSC.com",
-        "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com"
+        "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com",
+        "HOMUNCUL_PRINCIPAL": "Homoncul.ai@TheVLSC.com",
+        "CHATVLSC_PRINCIPAL": "Chat@TheVLSC.com",
+        "RISK_REVIEW_THRESHOLD": "8"
       }
     }
   }
