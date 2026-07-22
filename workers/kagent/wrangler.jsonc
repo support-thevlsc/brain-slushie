@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "thevlsc-kagent",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-22",
+  "workers_dev": false,
+  "observability": { "enabled": true },
+  "vars": {
+    "ENVIRONMENT": "development",
+    "OWNER_PRINCIPAL": "Christian@TheVLSC.com",
+    "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com"
+  },
+  "env": {
+    "staging": {
+      "name": "thevlsc-kagent-staging",
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "OWNER_PRINCIPAL": "Christian@TheVLSC.com",
+        "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com"
+      }
+    },
+    "production": {
+      "name": "thevlsc-kagent",
+      "vars": {
+        "ENVIRONMENT": "production",
+        "OWNER_PRINCIPAL": "Christian@TheVLSC.com",
+        "KAGENT_PRINCIPAL": "Kagent@TheVLSC.com"
+      }
+    }
+  }
+}
