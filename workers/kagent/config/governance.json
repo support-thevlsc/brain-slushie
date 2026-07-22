@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "riskScale": { "minimum": 0, "maximum": 10 },
+  "highRiskThreshold": 8,
+  "highRiskReviewers": [
+    "Homoncul.ai@TheVLSC.com",
+    "Chat@TheVLSC.com",
+    "Kagent@TheVLSC.com"
+  ],
+  "consensusRequired": true,
+  "unresolvedAction": {
+    "type": "owner_notification",
+    "recipient": "Christian@TheVLSC.com",
+    "requiredFields": ["summary", "proposals", "blockage", "risk"]
+  },
+  "prohibitedAutonomousChanges": [
+    "owner identity or recovery changes",
+    "billing ownership changes",
+    "privilege ceiling changes",
+    "production secret disclosure",
+    "cross-agent storage scope expansion"
+  ],
+  "notes": [
+    "Email delivery is performed by a separately configured private notification webhook.",
+    "No agent may approve its own privilege escalation.",
+    "Workers AI output is advisory and cannot bypass policy evaluation."
+  ]
+}

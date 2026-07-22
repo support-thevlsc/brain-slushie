@@ -1,0 +1,10 @@
+{
+  "policyVersion": 1,
+  "highRiskThreshold": 8,
+  "highRiskReviewers": ["homuncul", "chatvlsc", "kagent"],
+  "consensusRequired": true,
+  "ownerEscalationPrincipal": "christian@thevlsc.com",
+  "directMutationEnabled": false,
+  "notificationPayload": ["summary", "proposals", "blockage"],
+  "secretsAllowedInRepository": false
+}

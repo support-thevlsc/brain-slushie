@@ -1,0 +1,44 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "thevlsc-homuncul",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-22",
+  "workers_dev": false,
+  "vars": {
+    "ENVIRONMENT": "local",
+    "OWNER_PRINCIPAL": "christian@thevlsc.com",
+    "HOMUNCUL_PRINCIPAL": "homuncul.ai@thevlsc.com",
+    "KAGENT_PRINCIPAL": "kagent@thevlsc.com",
+    "CHATVLSC_PRINCIPAL": "chat@thevlsc.com",
+    "RISK_REVIEW_THRESHOLD": "8"
+  },
+  "ai": { "binding": "AI" },
+  "env": {
+    "staging": {
+      "name": "thevlsc-homuncul-staging",
+      "workers_dev": true,
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "OWNER_PRINCIPAL": "christian@thevlsc.com",
+        "HOMUNCUL_PRINCIPAL": "homuncul.ai@thevlsc.com",
+        "KAGENT_PRINCIPAL": "kagent@thevlsc.com",
+        "CHATVLSC_PRINCIPAL": "chat@thevlsc.com",
+        "RISK_REVIEW_THRESHOLD": "8"
+      },
+      "ai": { "binding": "AI" }
+    },
+    "production": {
+      "name": "thevlsc-homuncul",
+      "routes": [{ "pattern": "homuncul.thevlsc.com/*", "zone_name": "thevlsc.com" }],
+      "vars": {
+        "ENVIRONMENT": "production",
+        "OWNER_PRINCIPAL": "christian@thevlsc.com",
+        "HOMUNCUL_PRINCIPAL": "homuncul.ai@thevlsc.com",
+        "KAGENT_PRINCIPAL": "kagent@thevlsc.com",
+        "CHATVLSC_PRINCIPAL": "chat@thevlsc.com",
+        "RISK_REVIEW_THRESHOLD": "8"
+      },
+      "ai": { "binding": "AI" }
+    }
+  }
+}

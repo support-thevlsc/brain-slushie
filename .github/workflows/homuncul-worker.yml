@@ -1,0 +1,83 @@
+name: Homuncul Worker
+
+on:
+  pull_request:
+    paths:
+      - "workers/homuncul/**"
+      - ".github/workflows/homuncul-worker.yml"
+  push:
+    branches: [main]
+    paths:
+      - "workers/homuncul/**"
+      - ".github/workflows/homuncul-worker.yml"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Deployment target
+        required: true
+        type: choice
+        options: [staging, production]
+        default: staging
+      governance_record:
+        description: Proposal or approval record identifier
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: homuncul-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: workers/homuncul
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run check
+      - name: Verify protected route and governance threshold
+        run: |
+          grep -q 'homuncul.thevlsc.com' wrangler.jsonc
+          grep -q '"RISK_REVIEW_THRESHOLD": "8"' wrangler.jsonc
+
+  deploy-staging:
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'staging'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: homuncul-staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run deploy:staging
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  deploy-production:
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'production'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: homuncul-production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - name: Deploy homuncul.thevlsc.com
+        run: npm run deploy:production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

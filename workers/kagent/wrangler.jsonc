@@ -1,0 +1,49 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "thevlsc-kagent",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-22",
+  "workers_dev": false,
+  "observability": { "enabled": true },
+  "limits": { "cpu_ms": 50 },
+  "ai": { "binding": "AI" },
+  "vars": {
+    "ENVIRONMENT": "development",
+    "OWNER_PRINCIPAL": "christian@thevlsc.com",
+    "KAGENT_PRINCIPAL": "kagent@thevlsc.com",
+    "HOMUNCUL_PRINCIPAL": "homuncul.ai@thevlsc.com",
+    "CHATVLSC_PRINCIPAL": "chat@thevlsc.com",
+    "RISK_REVIEW_THRESHOLD": "8"
+  },
+  "env": {
+    "staging": {
+      "name": "thevlsc-kagent-staging",
+      "workers_dev": true,
+      "ai": { "binding": "AI" },
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "OWNER_PRINCIPAL": "christian@thevlsc.com",
+        "KAGENT_PRINCIPAL": "kagent@thevlsc.com",
+        "HOMUNCUL_PRINCIPAL": "homuncul.ai@thevlsc.com",
+        "CHATVLSC_PRINCIPAL": "chat@thevlsc.com",
+        "RISK_REVIEW_THRESHOLD": "8"
+      }
+    },
+    "production": {
+      "name": "thevlsc-kagent",
+      "workers_dev": false,
+      "routes": [
+        { "pattern": "kagent.thevlsc.com/*", "zone_name": "thevlsc.com" }
+      ],
+      "ai": { "binding": "AI" },
+      "vars": {
+        "ENVIRONMENT": "production",
+        "OWNER_PRINCIPAL": "christian@thevlsc.com",
+        "KAGENT_PRINCIPAL": "kagent@thevlsc.com",
+        "HOMUNCUL_PRINCIPAL": "homuncul.ai@thevlsc.com",
+        "CHATVLSC_PRINCIPAL": "chat@thevlsc.com",
+        "RISK_REVIEW_THRESHOLD": "8"
+      }
+    }
+  }
+}
