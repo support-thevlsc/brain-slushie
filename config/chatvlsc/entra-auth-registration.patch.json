@@ -1,0 +1,155 @@
+{
+  "$schema": "https://thevlsc.com/schemas/entra-auth-registration.patch.schema.json",
+  "name": "ChatVLSC Entra Authentication Registration Patch",
+  "status": "ready_for_admin_review_not_applied",
+  "generated_at": "2026-07-06T17:03:30-05:00",
+  "target": {
+    "tenant_id": "cdfffb2c-ef54-4854-9702-b9916ac552d1",
+    "application_object_id_candidate": "9c392dd7-7e0b-49a8-be0e-1269358f6f59",
+    "application_client_id_candidate": "520e42c6-398f-4521-aa62-b3b95092637d",
+    "graph_patch_url": "https://graph.microsoft.com/v1.0/applications/9c392dd7-7e0b-49a8-be0e-1269358f6f59"
+  },
+  "comparison_summary": {
+    "github_readiness_config_found": true,
+    "openai_platform_target_found": true,
+    "zapier_entra_raw_request_available": true,
+    "live_entra_application_body_confirmed": false,
+    "reason_not_auto_applied": "The Zapier Microsoft Graph read did not return a stable application body for comparison in this session. Apply this patch only after confirming the object ID and current app body in Entra."
+  },
+  "patch_body": {
+    "displayName": "ChatVLSC",
+    "signInAudience": "AzureADMyOrg",
+    "identifierUris": [
+      "api://520e42c6-398f-4521-aa62-b3b95092637d"
+    ],
+    "web": {
+      "homePageUrl": "https://mcp.thevlsc.com/v1/",
+      "logoutUrl": "https://mcp.thevlsc.com/v1/logout",
+      "redirectUris": [
+        "https://mcp.thevlsc.com/v1/auth/callback",
+        "https://mcp.thevlsc.com/user_role/auth/callback",
+        "https://chatvlsc.thevlsc.com/auth/v1/callback"
+      ],
+      "implicitGrantSettings": {
+        "enableAccessTokenIssuance": false,
+        "enableIdTokenIssuance": false
+      }
+    },
+    "api": {
+      "acceptMappedClaims": false,
+      "requestedAccessTokenVersion": 2,
+      "knownClientApplications": [],
+      "preAuthorizedApplications": [],
+      "oauth2PermissionScopes": [
+        {
+          "adminConsentDescription": "Allows ChatVLSC to read VLSC user roles and permission descriptions for the signed-in user.",
+          "adminConsentDisplayName": "Read VLSC user roles",
+          "id": "6762ffc6-67a3-549d-995d-28a75cf656b9",
+          "isEnabled": true,
+          "type": "User",
+          "userConsentDescription": "Allows ChatVLSC to read your VLSC role and permission descriptions.",
+          "userConsentDisplayName": "Read your VLSC role",
+          "value": "UserRole.Read"
+        },
+        {
+          "adminConsentDescription": "Allows ChatVLSC to read MCP consent names and descriptions for the signed-in user.",
+          "adminConsentDisplayName": "Read VLSC consent records",
+          "id": "7b19d68f-fd2d-590d-bc55-16d1a568d9ed",
+          "isEnabled": true,
+          "type": "User",
+          "userConsentDescription": "Allows ChatVLSC to read consent names and descriptions for your session.",
+          "userConsentDisplayName": "Read your VLSC consent records",
+          "value": "Consent.Read"
+        },
+        {
+          "adminConsentDescription": "Allows ChatVLSC to record MCP consent acknowledgements for the signed-in user.",
+          "adminConsentDisplayName": "Record VLSC consent acknowledgements",
+          "id": "d64df127-037a-5913-a37d-b5badc39e9f6",
+          "isEnabled": true,
+          "type": "User",
+          "userConsentDescription": "Allows ChatVLSC to record your consent acknowledgements.",
+          "userConsentDisplayName": "Record your VLSC consent acknowledgements",
+          "value": "Consent.Record"
+        }
+      ]
+    },
+    "appRoles": [
+      {
+        "allowedMemberTypes": ["User"],
+        "description": "Full ownership of ChatVLSC configuration, registration, identity, and administrative review.",
+        "displayName": "Owner",
+        "id": "f6cb0b3d-80e8-5db5-90db-d8ca47154448",
+        "isEnabled": true,
+        "origin": "Application",
+        "value": "Owner"
+      },
+      {
+        "allowedMemberTypes": ["User"],
+        "description": "Administrative access to ChatVLSC setup, user-role review, and approved operational actions.",
+        "displayName": "Admin",
+        "id": "46bf87ce-96bd-56ba-b837-6b4ff3ac19c0",
+        "isEnabled": true,
+        "origin": "Application",
+        "value": "Admin"
+      },
+      {
+        "allowedMemberTypes": ["User"],
+        "description": "Agent access for ChatVLSC workflow execution within approved role and consent boundaries.",
+        "displayName": "Agent",
+        "id": "0bf8e16c-0f82-5d38-8a5b-b1aad9372be4",
+        "isEnabled": true,
+        "origin": "Application",
+        "value": "Agent"
+      },
+      {
+        "allowedMemberTypes": ["User"],
+        "description": "Read-only ChatVLSC access for status, policy, and configuration visibility.",
+        "displayName": "Viewer",
+        "id": "a0f3907a-c4ac-570a-b93d-29157f87f40b",
+        "isEnabled": true,
+        "origin": "Application",
+        "value": "Viewer"
+      }
+    ],
+    "optionalClaims": {
+      "idToken": [
+        {
+          "name": "email",
+          "essential": false,
+          "additionalProperties": []
+        },
+        {
+          "name": "login_hint",
+          "essential": false,
+          "additionalProperties": []
+        },
+        {
+          "name": "upn",
+          "essential": false,
+          "additionalProperties": []
+        }
+      ],
+      "accessToken": [
+        {
+          "name": "idtyp",
+          "essential": false,
+          "additionalProperties": ["include_user_token"]
+        },
+        {
+          "name": "xms_cc",
+          "essential": false,
+          "additionalProperties": []
+        }
+      ],
+      "saml2Token": []
+    },
+    "groupMembershipClaims": "None"
+  },
+  "minimal_consent_scope_string": "openid profile email offline_access api://520e42c6-398f-4521-aa62-b3b95092637d/UserRole.Read api://520e42c6-398f-4521-aa62-b3b95092637d/Consent.Read api://520e42c6-398f-4521-aa62-b3b95092637d/Consent.Record",
+  "validation_rules": {
+    "authorize_by": ["tid", "oid", "roles", "scp"],
+    "do_not_authorize_by": ["email", "upn", "preferred_username"],
+    "expected_issuer": "https://login.microsoftonline.com/cdfffb2c-ef54-4854-9702-b9916ac552d1/v2.0",
+    "expected_audience": "520e42c6-398f-4521-aa62-b3b95092637d"
+  }
+}
