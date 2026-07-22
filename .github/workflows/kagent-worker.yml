@@ -1,0 +1,79 @@
+name: Kagent Worker
+
+on:
+  pull_request:
+    paths:
+      - "workers/kagent/**"
+      - ".github/workflows/kagent-worker.yml"
+  push:
+    branches: [main]
+    paths:
+      - "workers/kagent/**"
+      - ".github/workflows/kagent-worker.yml"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Deployment target
+        required: true
+        type: choice
+        options: [staging, production]
+        default: staging
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kagent-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: workers/kagent
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: workers/kagent/package-lock.json
+      - run: npm install
+      - run: npm run check
+      - name: Verify governance policy
+        run: node -e "const p=require('./config/governance.json'); if(p.highRiskThreshold!==8||p.highRiskReviewers.length!==3||!p.consensusRequired) process.exit(1)"
+
+  deploy-staging:
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'staging'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: kagent-staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run deploy:staging
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  deploy-production:
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'production'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: kagent-production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - name: Deploy mono.aireality.com
+        run: npm run deploy:production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
